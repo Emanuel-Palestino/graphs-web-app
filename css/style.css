@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+}
+
+#opciones {
+    width: 100%;
+    height: auto;
+    padding: 12px;
+}
+
+.boton {
+    display: inline-block;
+    width: 70px;
+    height: 50px;
+    padding: 6px;
+    border-radius: 6px;
+    color: white;
+    background-color: black;
+    text-align: center;
+}
+
+#canvas {
+    width: 100%;
+    height: 80vh;
+    border: 1px solid black;
+}
+
+.nodo {
+    r: 22px;
+    stroke: black;
+    stroke-width: 3px;
+    fill: white;
+    cursor: pointer;
+}
+
+.arista {
+    stroke: black;
+    stroke-width: 3px;
+    fill: none;
+    cursor: pointer;
+}
