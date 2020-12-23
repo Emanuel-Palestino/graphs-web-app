@@ -1,5 +1,6 @@
 const btnNodo = $("#nodo");
 const btnArista = $("#arista");
+const btnDelete;
 const canvas = $("#canvas");
 let tipoGrafo = 1;
 
