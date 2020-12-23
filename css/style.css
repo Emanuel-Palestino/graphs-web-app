@@ -30,6 +30,7 @@
 }
 
 .nodo {
+    position: relative;
     r: 22px;
     stroke: black;
     stroke-width: 3px;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="Emanuel Palestino">
+    <meta name="author" content="Emanuel">
     <script src="js/jquery-3.5.1.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <title>Aplicacion de Grafos</title>
@@ -12,18 +12,28 @@
     <h1>Aplicacion de Grafos</h1>
     <section id="menu">
         <div id="tipos">
+            <label for="grafo">Tipo de grafo: </label>
             <select id="grafo">
                 <option value="1">Grafo Normal</option>
                 <option value="2">Grafo Dirigido</option>
-                <option value="3">Grafo Pesado</option>
-                <option value="4">Grafo Pesado Dirigido</option>
             </select>
+
+            <label for="ponderado">Ponderado(Pesado): </label>
+            <input type="checkbox" id="ponderado">
             
+            <label for="algoritmo">Tipo de algoritmo a utilizar: </label>
             <select id="algoritmo">
                 <option value="1">BFS</option>
                 <option value="2">DFS</option>
                 <option value="3">otro</option>
                 <option value="4">otro</option>
+            </select>
+
+            <label for="orden">Orden en el que se toman las decisiones: </label>
+            <select id="orden">
+                <option value="1">Descendente</option>
+                <option value="2">Ascendente</option>
+                <option value="3">Personalizado</option>
             </select>
         </div>
 
@@ -34,7 +44,16 @@
     </section>
 
     <svg id="canvas">
+        <defs>
+            <marker id="arrowhead" orient="auto" markerWidth="6" markerHeight="4" refX="13" refY="2">
+                <path d="M0,0 V4 L6,2 Z" fill="black"></path>
+            </marker>
+        </defs>
 
+        <!--<g class="algo">
+            <circle class="nodo" id="nodo0" style="cx: 367px; cy: 281px;"></circle>
+            <text x="367" y="281" style="text-anchor: middle; alignment-baseline: middle ">pop</text>
+        </g>-->
     </svg>
     <script src="js/main.js"></script>
 </body>
