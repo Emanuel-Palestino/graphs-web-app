@@ -6,6 +6,7 @@ const btnDelete = $("#delete");
 const canvas = $("#canvas");
 const btnRestart = $("#restart");
 let tipoGrafo = 1;
+let ponderado = false;
 
 var elemento = 0;
 var contadorAristas = -1;
@@ -39,33 +40,51 @@ $("#grafo").change(function () {
     tipoGrafo = parseInt($(this).val());
 });
 
+// Saber si sera ponderado o no
+$("#ponderado").change(function () {
+    if ($("#ponderado:checked").val() != undefined)
+        ponderado = true;
+    else
+        ponderado = false;
+});
+
 // Crear un nodo dentro del lienzo
 canvas.click(function (event) {
-    let cursorX = event.clientX;
-    let cursorY = event.clientY;
+    let cursorX = parseFloat(event.clientX - margenCanvas.left).toFixed(3);
+    let cursorY = parseFloat(event.clientY - margenCanvas.top).toFixed(3);
     if (elemento == 1 && $(event.target).attr("class") != "nodo") {
         // Nombrar al nodo
         let inputName = $("#nodoName");
-        inputName[0].focus();
         showModal($("#rename_modal"), null, () => {
             inputName.val("");
+            $("#rename_form").off("submit");
+        }, function() {
+            inputName[0].focus();
         });
-        
-        inputName.focus();
-        
+
         $("#rename_form").on('submit', function (e) {
             e.preventDefault();
             let name = inputName.val();
             if (name != '') {
                 // Se crea el HTML para el nodo
+                let g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+                g.setAttribute("class", "full-nodo");
+
+                let nodeName = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+                nodeName.setAttribute("x", cursorX);
+                nodeName.setAttribute("y", cursorY - 26);
+                nodeName.setAttribute("for-node", name);
+
                 let newNodo = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
                 newNodo.setAttribute("class", "nodo");
                 newNodo.setAttribute("id", name);
+                newNodo.setAttribute("style", `cx: ${cursorX}px; cy: ${cursorY}px;`);
 
+                nodeName.textContent = name;
+                g.appendChild(newNodo);
+                g.appendChild(nodeName);
                 // Añadir nodo al DOM y definir sus coordenas
-                canvas[0].appendChild(newNodo);
-                currentNodo = $("#" + name);
-                currentNodo.css({ cx: cursorX - margenCanvas.left, cy: cursorY - margenCanvas.top });
+                canvas[0].appendChild(g);
 
                 // Registrar nodo en el programa
                 let nodo = {
@@ -76,10 +95,11 @@ canvas.click(function (event) {
                     aristas: []
                 }
                 nodos.push(nodo);
+
+                // cerrar modal
+                $("#rename_cancel").trigger("click");
+                $("#rename_form").off("submit");
             }
-            // cerrar modal
-            $("#rename_cancel").trigger("click");
-            $("#rename_form").off("submit");
         });
     }
 });
@@ -110,6 +130,9 @@ canvas.on("mousedown", ".nodo", function () {
             return aristaTemplate;
         });
 
+        // Obtener el nombre del nodo
+        let name = $("text[for-node='" + idCurrentNodo + "']");
+
         canvas.on("mousemove", function (event) {
             let currentX = parseFloat(event.clientX - margenCanvas.left).toFixed(3);
             let currentY = parseFloat(event.clientY - margenCanvas.top).toFixed(3);
@@ -130,6 +153,9 @@ canvas.on("mousedown", ".nodo", function () {
                         aristaDOM.attr("d", `M ${currentX} ${currentY} C ${currentX - 50} ${currentY - 60}  ${currentX + 50} ${currentY - 60} ${currentX} ${currentY} M ${currentX} ${currentY} Z`);
                 });
             }
+
+            // Mover nombre
+            name.attr("x", currentX).attr("y", currentY - 26);
         });
 
         // Dejar nodo en el lugar cuando se suelte el mouse
@@ -183,7 +209,27 @@ canvas.on("mousedown", ".nodo", function () {
                 };
 
                 // Preguntar por el peso de la arista
+                if (ponderado) {
+                    let inputWeight = $("#weight");
+                    showModal($("#set_weight_modal"), null, () => {
+                        inputWeight.val("");
+                        $("#set_weight_form").off("submit");
+                    }, function() {
+                        inputWeight.focus();
+                    });
 
+                    $("#set_weight_form").on("submit", function (e) {
+                        e.preventDefault();
+                        let weight = parseInt($("#weight").val());
+
+                        if (!isNaN(weight)) {
+                            arista.peso = weight;
+                            // cerrar modal
+                            $("#set_weight_cancel").trigger("click");
+                            $("#set_weight_form").off("submit");
+                        }
+                    });
+                }
                 aristas.push(arista);
 
                 // Actualizar LISTA ADYACENCIAS 
@@ -224,9 +270,8 @@ btnRestart.click(function () {
     window.location.reload();
 });
 
-
 // MODAL
-function showModal(modal, title = null, closing = null) {
+function showModal(modal, title = null, closing = null, showed = null) {
     if (title)
         modal.find('.t-modal-h p').html(title);
     modal.css('opacity', '1').fadeIn(400);
@@ -238,6 +283,13 @@ function showModal(modal, title = null, closing = null) {
         header.css('padding-right', '27px');
     }
     body.addClass('no-scroll');
+
+    // After showing
+    if (showed) {
+        setTimeout(function() {
+            showed();
+        }, 200);
+    }
 
     // Close Modal
     modal.on('click', '.t-modal-h button , .t-modal-f a:last-child()', function () {

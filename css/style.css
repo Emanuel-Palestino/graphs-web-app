@@ -34,6 +34,13 @@
     border: 1px solid black;
 }
 
+.full-nodo text{
+    text-anchor: middle;
+    alignment-baseline: after-edge;
+    fill: black;
+    font-size: 18px;
+}
+
 .nodo {
     position: relative;
     r: 22px;
@@ -56,7 +63,7 @@
 }
 
 .arista {
-    stroke: black;
+    stroke: #bbbbbb;
     stroke-width: 3px;
     fill: none;
     cursor: pointer;
@@ -138,4 +145,8 @@
 
   .no-scroll {
     overflow: hidden;
+  }
+
+  .hide {
+    display: none;
   }

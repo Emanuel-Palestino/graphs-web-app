@@ -47,20 +47,17 @@
         </div>
     </section>
 
+
+    <!-- CANVAS -->
     <svg id="canvas">
         <defs>
             <marker id="arrowhead" orient="auto" markerWidth="6" markerHeight="4" refX="13" refY="2">
-                <path d="M0,0 V4 L6,2 Z" fill="black"></path>
+                <path d="M0,0 V4 L6,2 Z" fill="gray"></path>
             </marker>
         </defs>
-
-        <!--<g class="algo">
-            <circle class="nodo" id="nodo0" style="cx: 367px; cy: 281px;"></circle>
-            <text x="367" y="281" style="text-anchor: middle; alignment-baseline: middle ">pop</text>
-        </g>-->
     </svg>
 
-    <!-- MODAL -->
+    <!-- MODALS -->
     <div class="t-modal" id="rename_modal">
         <div class="t-modal-content">
             <div class="t-modal-h center">
@@ -74,6 +71,23 @@
             <div class="t-modal-f">
                 <input type="submit" value="Hecho" form="rename_form" class="boton">
                 <a href="javascript:void(0)" class="boton" id="rename_cancel">Cancelar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="t-modal" id="set_weight_modal">
+        <div class="t-modal-content">
+            <div class="t-modal-h center">
+                <p>Ingresa el Peso de la arista</p>
+            </div>
+            <div class="t-modal-b card-1">
+                <form id="set_weight_form">
+                    <input type="number" id="weight" class="" autocomplete="off" step="0.01">
+                </form>
+            </div>
+            <div class="t-modal-f">
+                <input type="submit" value="Hecho" form="set_weight_form" class="boton">
+                <a href="javascript:void(0)" class="boton hide" id="set_weight_cancel">Cancelar</a>
             </div>
         </div>
     </div>
