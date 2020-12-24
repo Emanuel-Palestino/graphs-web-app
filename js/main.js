@@ -1,11 +1,13 @@
+$('.t-modal').hide();
+
 const btnNodo = $("#nodo");
 const btnArista = $("#arista");
-const btnDelete;
+const btnDelete = $("#delete");
 const canvas = $("#canvas");
+const btnRestart = $("#restart");
 let tipoGrafo = 1;
 
 var elemento = 0;
-var contadorNodo = -1;
 var contadorAristas = -1;
 var aristaFlag = 0;
 
@@ -16,48 +18,69 @@ var nodos = [];
 var aristas = [];
 var listaAdyacencias = {};
 
+let margenCanvas = canvas.offset();
+
 // Identificar que tipo de elemento se va a crear en el lienzo
 btnNodo.click(function () {
     elemento = 1;
     aristaFlag = 0;
+    // clase para cambiar la vista del cursor
+    $(".nodo").removeClass("nodoarista");
 });
 btnArista.click(function () {
     elemento = 2;
     aristaFlag = 0;
+    // clase para cambiar la vista del cursor
+    $(".nodo").addClass("nodoarista");
 });
 
 // Detectar que tipo de grafo se va a dibujar
-$("#grafo").change(function() {
+$("#grafo").change(function () {
     tipoGrafo = parseInt($(this).val());
 });
 
 // Crear un nodo dentro del lienzo
 canvas.click(function (event) {
+    let cursorX = event.clientX;
+    let cursorY = event.clientY;
     if (elemento == 1 && $(event.target).attr("class") != "nodo") {
-        contadorNodo++;
-
-        // Se crea el HTML para el nodo
-        let newNodo = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-        newNodo.setAttribute("class", "nodo");
-
         // Nombrar al nodo
+        let inputName = $("#nodoName");
+        inputName[0].focus();
+        showModal($("#rename_modal"), null, () => {
+            inputName.val("");
+        });
+        
+        inputName.focus();
+        
+        $("#rename_form").on('submit', function (e) {
+            e.preventDefault();
+            let name = inputName.val();
+            if (name != '') {
+                // Se crea el HTML para el nodo
+                let newNodo = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+                newNodo.setAttribute("class", "nodo");
+                newNodo.setAttribute("id", name);
 
-        newNodo.setAttribute("id", "nodo" + contadorNodo);
+                // Añadir nodo al DOM y definir sus coordenas
+                canvas[0].appendChild(newNodo);
+                currentNodo = $("#" + name);
+                currentNodo.css({ cx: cursorX - margenCanvas.left, cy: cursorY - margenCanvas.top });
 
-        // Añadir nodo al DOM y definir sus coordenas
-        canvas[0].appendChild(newNodo);
-        currentNodo = $("#nodo" + contadorNodo);
-        currentNodo.css({ cx: event.clientX, "cy": event.clientY - 130 });
-
-        // Registrar nodo en el programa
-        let nodo = {
-            id: contadorNodo,
-            color: "white",
-            distancia: 0,
-            predecesor: null,
-            aristas: []
-        }
-        nodos.push(nodo);
+                // Registrar nodo en el programa
+                let nodo = {
+                    id: name,
+                    color: "white",
+                    distancia: 0,
+                    predecesor: null,
+                    aristas: []
+                }
+                nodos.push(nodo);
+            }
+            // cerrar modal
+            $("#rename_cancel").trigger("click");
+            $("#rename_form").off("submit");
+        });
     }
 });
 
@@ -65,17 +88,17 @@ canvas.click(function (event) {
 canvas.on("mousedown", ".nodo", function () {
     // Obtener algunas propiedades del nodo
     let nodo = $(this);
-    let idCurrentNodo = nodo.attr("id").slice(4); // slice porque por ahora todos se llaman nodo#
-    let nodoX = parseInt(nodo.css("cx").slice(0, -2)); // solo necesito las coordenadas, y el .css devuelve #px
-    let nodoY = parseInt(nodo.css("cy").slice(0, -2));
+    let idCurrentNodo = nodo.attr("id");
+    let indexNodo = nodos.findIndex(nodo => nodo.id == idCurrentNodo);
+    let nodoX = parseFloat(nodo.css("cx").slice(0, -2)).toFixed(3); // solo necesito las coordenadas, y el .css devuelve #px
+    let nodoY = parseFloat(nodo.css("cy").slice(0, -2)).toFixed(3);
 
     if (elemento == 1) {
         // Obtener las aristas asociadas al nodo
-        // tengo antes que encontrar el index del nodo dentro de mi lista de nodos
-        let currentAristas = nodos[idCurrentNodo].aristas.map(arista => {
+        let currentAristas = nodos[indexNodo].aristas.map(arista => {
             let currentArista = $("#arista" + arista.id);
             let x = "x2", y = "y2";
-            if (currentArista.attr("x1") == nodoX && currentArista.attr("y1") == nodoY) {
+            if (parseFloat(currentArista.attr("x1")).toFixed(3) == nodoX && parseFloat(currentArista.attr("y1")).toFixed(3) == nodoY) {
                 x = "x1";
                 y = "y1";
             }
@@ -88,8 +111,8 @@ canvas.on("mousedown", ".nodo", function () {
         });
 
         canvas.on("mousemove", function (event) {
-            let currentX = event.clientX;
-            let currentY = event.clientY - 130;
+            let currentX = parseFloat(event.clientX - margenCanvas.left).toFixed(3);
+            let currentY = parseFloat(event.clientY - margenCanvas.top).toFixed(3);
             // Mover nodo
             nodo.css({
                 cx: currentX,
@@ -158,11 +181,11 @@ canvas.on("mousedown", ".nodo", function () {
                     id: contadorAristas,
                     peso: null
                 };
-                
+
                 // Preguntar por el peso de la arista
-                
+
                 aristas.push(arista);
-                
+
                 // Actualizar LISTA ADYACENCIAS 
                 // Grafo Dirigido o Normal
                 if (idNodo1 in listaAdyacencias)
@@ -180,13 +203,13 @@ canvas.on("mousedown", ".nodo", function () {
                         listaAdyacencias[idNodo2][idNodo1] = 1;
                     }
                 }
-    
+
                 // Asociar a los nodos
-                idNodo1 = nodos.findIndex(nodo => nodo.id == idNodo1);
-                idNodo2 = nodos.findIndex(nodo => nodo.id == idNodo2);
-                if (idNodo1 != idNodo2)
-                    nodos[idNodo1].aristas.push(arista);
-                nodos[idNodo2].aristas.push(arista);
+                indexNodo1 = nodos.findIndex(nodo => nodo.id == idNodo1);
+                indexNodo2 = nodos.findIndex(nodo => nodo.id == idNodo2);
+                if (indexNodo1 != indexNodo2)
+                    nodos[indexNodo1].aristas.push(arista);
+                nodos[indexNodo2].aristas.push(arista);
             }
 
             // reiniciar contadores de las aristas
@@ -195,3 +218,35 @@ canvas.on("mousedown", ".nodo", function () {
         }
     }
 });
+
+// Reiniciar Dibujo de Grafo
+btnRestart.click(function () {
+    window.location.reload();
+});
+
+
+// MODAL
+function showModal(modal, title = null, closing = null) {
+    if (title)
+        modal.find('.t-modal-h p').html(title);
+    modal.css('opacity', '1').fadeIn(400);
+    modal.children().eq(0).css('margin-top', '0');
+    let body = $('body');
+    let header = $('header');
+    if (body.height() > $(window).height() && screen.width > 1024) {
+        body.css('padding-right', '17px');
+        header.css('padding-right', '27px');
+    }
+    body.addClass('no-scroll');
+
+    // Close Modal
+    modal.on('click', '.t-modal-h button , .t-modal-f a:last-child()', function () {
+        modal.children().removeAttr('style');
+        modal.fadeOut(400);
+        body.removeClass('no-scroll').removeAttr('style');
+        header.removeAttr('style');
+        if (closing)
+            closing();
+        modal.off('click');
+    });
+}

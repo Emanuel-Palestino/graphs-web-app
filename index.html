@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Aplicacion de Grafos</title>
 </head>
+
 <body>
     <h1>Aplicacion de Grafos</h1>
     <section id="menu">
@@ -20,7 +22,7 @@
 
             <label for="ponderado">Ponderado(Pesado): </label>
             <input type="checkbox" id="ponderado">
-            
+
             <label for="algoritmo">Tipo de algoritmo a utilizar: </label>
             <select id="algoritmo">
                 <option value="1">BFS</option>
@@ -40,6 +42,8 @@
         <div id="opciones">
             <a href="javascript:void(0)" id="nodo" class="boton">Nodo</a>
             <a href="javascript:void(0)" id="arista" class="boton">Arista</a>
+            <!--<a href="javascript:void(0)" id="delete" class="boton">Eliminar Elemento</a>-->
+            <a href="javascript:void(0)" id="restart" class="boton">Reiniciar Grafo</a>
         </div>
     </section>
 
@@ -55,6 +59,26 @@
             <text x="367" y="281" style="text-anchor: middle; alignment-baseline: middle ">pop</text>
         </g>-->
     </svg>
+
+    <!-- MODAL -->
+    <div class="t-modal" id="rename_modal">
+        <div class="t-modal-content">
+            <div class="t-modal-h center">
+                <p>Nombra el Nodo Creado</p>
+            </div>
+            <div class="t-modal-b card-1">
+                <form id="rename_form">
+                    <input type="text" id="nodoName" class="" autocomplete="off">
+                </form>
+            </div>
+            <div class="t-modal-f">
+                <input type="submit" value="Hecho" form="rename_form" class="boton">
+                <a href="javascript:void(0)" class="boton" id="rename_cancel">Cancelar</a>
+            </div>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
 </body>
+
 </html>
