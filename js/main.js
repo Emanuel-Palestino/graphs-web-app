@@ -40,7 +40,7 @@ $("#grafo").change(function () {
     tipoGrafo = parseInt($(this).val());
 });
 
-// Saber si sera ponderado o no
+// Saber si es ponderado o no
 $("#ponderado").change(function () {
     if ($("#ponderado:checked").val() != undefined)
         ponderado = true;
@@ -58,8 +58,8 @@ canvas.click(function (event) {
         showModal($("#rename_modal"), null, () => {
             inputName.val("");
             $("#rename_form").off("submit");
-        }, function() {
-            inputName[0].focus();
+        }, function () {
+            inputName.focus();
         });
 
         $("#rename_form").on('submit', function (e) {
@@ -84,7 +84,7 @@ canvas.click(function (event) {
                 g.appendChild(newNodo);
                 g.appendChild(nodeName);
                 // Añadir nodo al DOM y definir sus coordenas
-                canvas[0].appendChild(g);
+                canvas.append(g);
 
                 // Registrar nodo en el programa
                 let nodo = {
@@ -117,15 +117,27 @@ canvas.on("mousedown", ".nodo", function () {
         // Obtener las aristas asociadas al nodo
         let currentAristas = nodos[indexNodo].aristas.map(arista => {
             let currentArista = $("#arista" + arista.id);
-            let x = "x2", y = "y2";
-            if (parseFloat(currentArista.attr("x1")).toFixed(3) == nodoX && parseFloat(currentArista.attr("y1")).toFixed(3) == nodoY) {
-                x = "x1";
-                y = "y1";
-            }
+            let contentD = currentArista.attr("d").split(" ");
+            let indexContent = [];
+            let secondNode = 0.0;
+            let offset = currentArista.next().children().attr("startOffset");
+
+            contentD.forEach((segment, i) => {
+                if (segment.length > 2) {
+                    let coordenadas = segment.split(",");
+                    if (parseFloat(coordenadas[0]) == nodoX && parseFloat(coordenadas[1]) == nodoY)
+                        indexContent.push(i);
+                    else
+                    secondNode = parseFloat(coordenadas[0]);
+                }
+            });
             let aristaTemplate = {
                 id: arista.id,
-                x: x,
-                y: y
+                content: contentD,
+                index: indexContent,
+                secondNodeX: secondNode,
+                movingRightNode: (secondNode < nodoX) ? true : false,
+                startOffset: offset
             };
             return aristaTemplate;
         });
@@ -146,11 +158,23 @@ canvas.on("mousedown", ".nodo", function () {
             if (currentAristas.length > 0) {
                 currentAristas.forEach(arista => {
                     let aristaDOM = $("#arista" + arista.id);
-                    if (!aristaDOM.is("path")) {
-                        aristaDOM.attr(arista.x, currentX);
-                        aristaDOM.attr(arista.y, currentY);
-                    } else
-                        aristaDOM.attr("d", `M ${currentX} ${currentY} C ${currentX - 50} ${currentY - 60}  ${currentX + 50} ${currentY - 60} ${currentX} ${currentY} M ${currentX} ${currentY} Z`);
+                    if (arista.index.length == 1) {
+                        arista.content[arista.index] = currentX + "," + currentY;
+                        aristaDOM.attr("d", arista.content.join(' '));
+                        if (arista.movingRightNode) {
+                            if (currentX < arista.secondNodeX) {
+                                arista.movingRightNode = false;
+                                aristaDOM.next().children().attr("startOffset", (arista.startOffset == "25%") ? arista.startOffset = "75%" : arista.startOffset = "25%");
+                            }
+                        } else {
+                            if (currentX > arista.secondNodeX) {
+                                arista.movingRightNode = true;
+                                aristaDOM.next().children().attr("startOffset", (arista.startOffset == "25%") ? arista.startOffset = "75%" : arista.startOffset = "25%");
+                            }
+                        }
+                    } else {
+                        aristaDOM.attr("d", `M ${currentX} ${currentY} C ${currentX - 70} ${currentY - 75}  ${parseFloat(currentX) + 70} ${currentY - 75} ${currentX} ${currentY} M ${currentX} ${currentY} Z`);
+                    }
                 });
             }
 
@@ -183,53 +207,67 @@ canvas.on("mousedown", ".nodo", function () {
             if (listaAdyacencias[idNodo1] == undefined || (listaAdyacencias[idNodo1] != undefined && listaAdyacencias[idNodo1][idNodo2] == undefined)) {
                 // Crear Arista
                 contadorAristas++;
-                let newArista;
-                // creando un ciclo
+                let g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+                let newArista = document.createElementNS("http://www.w3.org/2000/svg", 'path');
                 if (idNodo1 == idNodo2) {
-                    newArista = document.createElementNS("http://www.w3.org/2000/svg", 'path');
-                    newArista.setAttribute("d", `M ${x0} ${y0} C ${x0 - 50} ${y0 - 60}  ${x0 + 50} ${y0 - 60} ${x0} ${y0} Z`);
+                    // creando un ciclo
+                    newArista.setAttribute("d", `M ${x0},${y0} C ${parseFloat(x0 - 70).toFixed(3)},${parseFloat(y0 - 75).toFixed(3)} ${parseFloat(parseFloat(x0) + 70).toFixed(3)},${parseFloat(y0 - 75).toFixed(3)} ${x0},${y0} Z`);
                 } else {
-                    newArista = document.createElementNS("http://www.w3.org/2000/svg", 'line');
-                    newArista.setAttribute("x1", x0);
-                    newArista.setAttribute("y1", y0);
-                    newArista.setAttribute("x2", x1);
-                    newArista.setAttribute("y2", y1);
+                    newArista.setAttribute("d", `M ${x0},${y0} L ${x1},${y1} Z`);
                     if (tipoGrafo == 2)
                         newArista.setAttribute("marker-end", 'url(#arrowhead)');
                 }
                 newArista.setAttribute("class", "arista");
                 newArista.setAttribute("id", "arista" + contadorAristas);
+                g.setAttribute("class", "full-edge");
 
-                // Dibujar Arista
-                canvas[0].prepend(newArista);
-                // Registar arista
                 let arista = {
                     id: contadorAristas,
                     peso: null
                 };
 
+                
                 // Preguntar por el peso de la arista
                 if (ponderado) {
                     let inputWeight = $("#weight");
                     showModal($("#set_weight_modal"), null, () => {
                         inputWeight.val("");
                         $("#set_weight_form").off("submit");
-                    }, function() {
+                    }, function () {
                         inputWeight.focus();
                     });
-
+                    
+                    let thisx0 = x0, thisx1 = x1;
+                    
                     $("#set_weight_form").on("submit", function (e) {
                         e.preventDefault();
-                        let weight = parseInt($("#weight").val());
-
+                        let weight = parseInt(inputWeight.val());
                         if (!isNaN(weight)) {
-                            arista.peso = weight;
+                            // Dibujar Arista
+                            g.appendChild(newArista);
+                            canvas.prepend(g);
+                            // Dibujar peso
+                            let edge = $("#arista" + contadorAristas);
+                            let weightLabel = edge.next().children();
+                            $("#template-textPath").children().clone().appendTo(edge.parent());
+                            edge.next().children().text(weight).attr("xlink:href", "#arista" + contadorAristas);
+                            // Posicionar Peso
+                            if (idNodo1 == idNodo2)
+                                edge.next().children().attr("startOffset", "50%");
+                            else if (thisx1 < thisx0)
+                                edge.next().children().attr("startOffset", "75%");
+
                             // cerrar modal
                             $("#set_weight_cancel").trigger("click");
                             $("#set_weight_form").off("submit");
                         }
                     });
+                } else {
+                    // Dibujar Arista
+                    g.appendChild(newArista);
+                    canvas.prepend(g);
                 }
+                // Registar arista
                 aristas.push(arista);
 
                 // Actualizar LISTA ADYACENCIAS 
@@ -286,7 +324,7 @@ function showModal(modal, title = null, closing = null, showed = null) {
 
     // After showing
     if (showed) {
-        setTimeout(function() {
+        setTimeout(function () {
             showed();
         }, 200);
     }

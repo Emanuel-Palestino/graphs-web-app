@@ -39,6 +39,14 @@
     alignment-baseline: after-edge;
     fill: black;
     font-size: 18px;
+    pointer-events: none;
+}
+
+.full-edge {
+  text-anchor: middle;
+  dominant-baseline: text-after-edge;
+  fill: #2C3E50;
+  font-size: 14px;
 }
 
 .nodo {

@@ -31,18 +31,17 @@
                 <option value="4">otro</option>
             </select>
 
-            <label for="orden">Orden en el que se toman las decisiones: </label>
+            <!--<label for="orden">Orden en el que se toman las decisiones: </label>
             <select id="orden">
                 <option value="1">Descendente</option>
                 <option value="2">Ascendente</option>
                 <option value="3">Personalizado</option>
-            </select>
+            </select>-->
         </div>
 
         <div id="opciones">
             <a href="javascript:void(0)" id="nodo" class="boton">Nodo</a>
             <a href="javascript:void(0)" id="arista" class="boton">Arista</a>
-            <!--<a href="javascript:void(0)" id="delete" class="boton">Eliminar Elemento</a>-->
             <a href="javascript:void(0)" id="restart" class="boton">Reiniciar Grafo</a>
         </div>
     </section>
@@ -55,6 +54,11 @@
                 <path d="M0,0 V4 L6,2 Z" fill="gray"></path>
             </marker>
         </defs>
+        <g id="template-textPath">
+            <text>
+                <textPath xlink:href="#" startOffset="25%">0</textPath>
+            </text>
+        </g>
     </svg>
 
     <!-- MODALS -->
