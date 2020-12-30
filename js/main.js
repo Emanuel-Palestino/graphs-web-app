@@ -119,28 +119,32 @@ canvas.on("mousedown", ".nodo", function () {
             let currentArista = $("#arista" + arista.id);
             let contentD = currentArista.attr("d").split(" ");
             let indexContent = [];
-            let secondNode = 0.0;
-            let offset = currentArista.next().children().attr("startOffset");
+            let secondNode = [];
+            // conseguir los grados de rotacion del peso (funciona en dos lineas ya que el peso solo tiene dos estados)
+            let values = currentArista.next().css("transform").split('(')[1].split(')')[0].split(',');
+            let deg = (values[0] == "1") ? 0 : 180;
 
+            // identificar que coordenadas se van a modificar
             contentD.forEach((segment, i) => {
                 if (segment.length > 2) {
                     let coordenadas = segment.split(",");
-                    if (parseFloat(coordenadas[0]) == nodoX && parseFloat(coordenadas[1]) == nodoY)
+                    if (parseFloat(coordenadas[0]) == nodoX && parseFloat(coordenadas[1]) == nodoY) {
                         indexContent.push(i);
-                    else
-                    secondNode = parseFloat(coordenadas[0]);
+                    } else
+                        secondNode = i;
                 }
             });
             let aristaTemplate = {
                 id: arista.id,
                 content: contentD,
                 index: indexContent,
-                secondNodeX: secondNode,
-                movingRightNode: (secondNode < nodoX) ? true : false,
-                startOffset: offset
+                indexSecondNode: secondNode,
+                movingRightNode: (parseFloat(contentD[secondNode].split(",")) < nodoX) ? true : false,
+                degrees: deg
             };
             return aristaTemplate;
         });
+
 
         // Obtener el nombre del nodo
         let name = $("text[for-node='" + idCurrentNodo + "']");
@@ -158,22 +162,31 @@ canvas.on("mousedown", ".nodo", function () {
             if (currentAristas.length > 0) {
                 currentAristas.forEach(arista => {
                     let aristaDOM = $("#arista" + arista.id);
-                    if (arista.index.length == 1) {
-                        arista.content[arista.index] = currentX + "," + currentY;
-                        aristaDOM.attr("d", arista.content.join(' '));
-                        if (arista.movingRightNode) {
-                            if (currentX < arista.secondNodeX) {
-                                arista.movingRightNode = false;
-                                aristaDOM.next().children().attr("startOffset", (arista.startOffset == "25%") ? arista.startOffset = "75%" : arista.startOffset = "25%");
+                    if (arista.index.length < 3) {
+                        arista.index.forEach(i => {
+                            // se modfica el atributo 'd' del path
+                            arista.content[i] = currentX + "," + currentY;
+                            let otherNodeC = arista.content[arista.indexSecondNode].split(",");
+                            aristaDOM.attr("d", arista.content.join(' '));
+                            // actualizar el punto medio de la arista / eje de rotacion del peso
+                            let c = ((parseFloat(otherNodeC[0]) + parseFloat(currentX))/2).toFixed(2) + "px " + ((parseFloat(otherNodeC[1]) + parseFloat(currentY))/2).toFixed(2) + "px";
+                            aristaDOM.next().css("transform-origin", c);
+
+                            // Mover el peso de la arista
+                            if (arista.movingRightNode) {
+                                if (parseFloat(currentX) < parseFloat(otherNodeC[0])) {
+                                    arista.movingRightNode = false;
+                                    aristaDOM.next().css("transform", (arista.degrees == 0) ? `rotate(${arista.degrees = 180}deg)` : `rotate(${arista.degrees = 0}deg)`);
+                                }
+                            } else {
+                                if (parseFloat(currentX) > parseFloat(otherNodeC[0])) {
+                                    arista.movingRightNode = true;
+                                    aristaDOM.next().css("transform", (arista.degrees == 0) ? `rotate(${arista.degrees = 180}deg)` : `rotate(${arista.degrees = 0}deg)`);
+                                }
                             }
-                        } else {
-                            if (currentX > arista.secondNodeX) {
-                                arista.movingRightNode = true;
-                                aristaDOM.next().children().attr("startOffset", (arista.startOffset == "25%") ? arista.startOffset = "75%" : arista.startOffset = "25%");
-                            }
-                        }
+                        });
                     } else {
-                        aristaDOM.attr("d", `M ${currentX} ${currentY} C ${currentX - 70} ${currentY - 75}  ${parseFloat(currentX) + 70} ${currentY - 75} ${currentX} ${currentY} M ${currentX} ${currentY} Z`);
+                        aristaDOM.attr("d", `M ${currentX},${currentY} C ${currentX - 70},${currentY - 75} ${parseFloat(currentX) + 70},${currentY - 75} ${currentX},${currentY} M ${currentX},${currentY}`);
                     }
                 });
             }
@@ -211,9 +224,9 @@ canvas.on("mousedown", ".nodo", function () {
                 let newArista = document.createElementNS("http://www.w3.org/2000/svg", 'path');
                 if (idNodo1 == idNodo2) {
                     // creando un ciclo
-                    newArista.setAttribute("d", `M ${x0},${y0} C ${parseFloat(x0 - 70).toFixed(3)},${parseFloat(y0 - 75).toFixed(3)} ${parseFloat(parseFloat(x0) + 70).toFixed(3)},${parseFloat(y0 - 75).toFixed(3)} ${x0},${y0} Z`);
+                    newArista.setAttribute("d", `M ${x0},${y0} C ${parseFloat(x0 - 70).toFixed(3)},${parseFloat(y0 - 75).toFixed(3)} ${parseFloat(parseFloat(x0) + 70).toFixed(3)},${parseFloat(y0 - 75).toFixed(3)} ${x0},${y0} M ${x0},${y0}`);
                 } else {
-                    newArista.setAttribute("d", `M ${x0},${y0} L ${x1},${y1} Z`);
+                    newArista.setAttribute("d", `M ${x0},${y0} L ${x1},${y1}`);
                     if (tipoGrafo == 2)
                         newArista.setAttribute("marker-end", 'url(#arrowhead)');
                 }
@@ -237,7 +250,7 @@ canvas.on("mousedown", ".nodo", function () {
                         inputWeight.focus();
                     });
                     
-                    let thisx0 = x0, thisx1 = x1;
+                    let thisx0 = parseFloat(x0), thisx1 = parseFloat(x1), thisy0 = parseFloat(y0), thisy1 = parseFloat(y1);
                     
                     $("#set_weight_form").on("submit", function (e) {
                         e.preventDefault();
@@ -250,12 +263,16 @@ canvas.on("mousedown", ".nodo", function () {
                             let edge = $("#arista" + contadorAristas);
                             let weightLabel = edge.next().children();
                             $("#template-textPath").children().clone().appendTo(edge.parent());
-                            edge.next().children().text(weight).attr("xlink:href", "#arista" + contadorAristas);
+                            edge.next().children().text(weight).attr("href", "#arista" + contadorAristas);
+                            // Definir coordenadas del centro de rotacion para el peso
+                            let c = ((thisx0 + thisx1)/2).toFixed(2) + "px " + ((thisy0 + thisy1)/2).toFixed(2) + "px";
+                            edge.next().css("transform-origin", c);
                             // Posicionar Peso
-                            if (idNodo1 == idNodo2)
-                                edge.next().children().attr("startOffset", "50%");
-                            else if (thisx1 < thisx0)
-                                edge.next().children().attr("startOffset", "75%");
+                            if (thisx1 < thisx0)
+                                edge.next().css("transform", "rotate(180deg)");
+                            else {
+                                edge.next().css("transform", "rotate(0deg)");
+                            }
 
                             // cerrar modal
                             $("#set_weight_cancel").trigger("click");
