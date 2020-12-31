@@ -34,19 +34,13 @@
     border: 1px solid black;
 }
 
+/* NODOS */
 .full-nodo text{
     text-anchor: middle;
     alignment-baseline: after-edge;
     fill: black;
     font-size: 18px;
     pointer-events: none;
-}
-
-.full-edge {
-  text-anchor: middle;
-  dominant-baseline: text-after-edge;
-  fill: #2C3E50;
-  font-size: 14px;
 }
 
 .nodo {
@@ -66,16 +60,31 @@
     cursor: pointer;
 }
 
+.start {
+  fill: orange;
+}
+
+.visited {
+  fill: cornflowerblue;
+}
+
 .nodoarista:active {
     cursor: pointer;
 }
 
+/* ARISTAS */
 .arista {
     stroke: #bbbbbb;
     stroke-width: 3px;
     fill: none;
     cursor: pointer;
 }
+
+.path {
+  stroke: brown;
+  stroke-width: 5px;
+}
+
 
 /* MODAL */
 .t-modal {

@@ -24,7 +24,7 @@ btnNodo.click(function () {
     elemento = 1;
     aristaFlag = 0;
     // clase para cambiar la vista del cursor
-    $(".nodo").removeClass("nodoarista");
+    $(".nodo").removeClass(["nodoarista"]);
 });
 btnArista.click(function () {
     elemento = 2;
@@ -50,7 +50,7 @@ $("#ponderado").change(function () {
 canvas.click(function (event) {
     let cursorX = parseFloat(event.clientX - margenCanvas.left).toFixed(3);
     let cursorY = parseFloat(event.clientY - margenCanvas.top).toFixed(3);
-    if (elemento == 1 && $(event.target).attr("class") != "nodo") {
+    if (elemento == 1 && !$(event.target).hasClass("nodo")) {
         // Nombrar al nodo
         let inputName = $("#nodoName");
         showModal($("#rename_modal"), null, () => {
@@ -87,8 +87,8 @@ canvas.click(function (event) {
                 // Registrar nodo en el programa
                 let nodo = {
                     id: name,
-                    color: "white",
-                    distancia: 0,
+                    estado: "no visitado",
+                    distancia: Infinity,
                     predecesor: null,
                     aristas: []
                 }
@@ -170,7 +170,7 @@ canvas.on("mousedown", ".nodo", function () {
                             let otherNodeC = arista.content[arista.indexSecondNode].split(",");
                             aristaDOM.attr("d", arista.content.join(' '));
                             // actualizar el punto medio de la arista / eje de rotacion del peso
-                            let c = ((parseFloat(otherNodeC[0]) + parseFloat(currentX))/2).toFixed(2) + "px " + ((parseFloat(otherNodeC[1]) + parseFloat(currentY))/2).toFixed(2) + "px";
+                            let c = ((parseFloat(otherNodeC[0]) + parseFloat(currentX)) / 2).toFixed(2) + "px " + ((parseFloat(otherNodeC[1]) + parseFloat(currentY)) / 2).toFixed(2) + "px";
                             aristaDOM.next().css("transform-origin", c);
 
                             // Mover el peso de la arista
@@ -233,6 +233,9 @@ canvas.on("mousedown", ".nodo", function () {
                 }
                 newArista.setAttribute("class", "arista");
                 newArista.setAttribute("id", "arista" + contadorAristas);
+                // Indicar de que nodo hacia que nodo va la arista
+                newArista.setAttribute("fromNode", idNodo1);
+                newArista.setAttribute("toNode", idNodo2);
                 g.setAttribute("class", "full-edge");
 
                 let arista = {
@@ -240,7 +243,7 @@ canvas.on("mousedown", ".nodo", function () {
                     peso: null
                 };
 
-                
+
                 // Preguntar por el peso de la arista
                 if (ponderado) {
                     let inputWeight = $("#weight");
@@ -250,9 +253,9 @@ canvas.on("mousedown", ".nodo", function () {
                     }, function () {
                         inputWeight.focus();
                     });
-                    
+
                     let thisx0 = parseFloat(x0), thisx1 = parseFloat(x1), thisy0 = parseFloat(y0), thisy1 = parseFloat(y1);
-                    
+
                     $("#set_weight_form").on("submit", function (e) {
                         e.preventDefault();
                         let weight = parseInt(inputWeight.val());
@@ -266,7 +269,7 @@ canvas.on("mousedown", ".nodo", function () {
                             $("#template-textPath").children().clone().appendTo(edge.parent());
                             edge.next().children().text(weight).attr("href", "#arista" + contadorAristas);
                             // Definir coordenadas del centro de rotacion para el peso
-                            let c = ((thisx0 + thisx1)/2).toFixed(2) + "px " + ((thisy0 + thisy1)/2).toFixed(2) + "px";
+                            let c = ((thisx0 + thisx1) / 2).toFixed(2) + "px " + ((thisy0 + thisy1) / 2).toFixed(2) + "px";
                             edge.next().css("transform-origin", c);
                             // Posicionar Peso
                             if (thisx1 < thisx0)
@@ -274,6 +277,36 @@ canvas.on("mousedown", ".nodo", function () {
                             else {
                                 edge.next().css("transform", "rotate(0deg)");
                             }
+                            // agregar peso en la Lista de Adyacencias
+                            arista.peso = weight;
+
+                            // Registar arista
+                            aristas.push(arista);
+
+                            // Actualizar LISTA ADYACENCIAS 
+                            // Grafo Dirigido o Normal
+                            if (idNodo1 in listaAdyacencias)
+                                listaAdyacencias[idNodo1][idNodo2] = (arista.peso == null) ? 1 : arista.peso;
+                            else {
+                                listaAdyacencias[idNodo1] = {};
+                                listaAdyacencias[idNodo1][idNodo2] = (arista.peso == null) ? 1 : arista.peso;
+                            }
+                            // Solo si es un grafo normal
+                            if (tipoGrafo == 1) {
+                                if (idNodo2 in listaAdyacencias)
+                                    listaAdyacencias[idNodo2][idNodo1] = (arista.peso == null) ? 1 : arista.peso;
+                                else {
+                                    listaAdyacencias[idNodo2] = {};
+                                    listaAdyacencias[idNodo2][idNodo1] = (arista.peso == null) ? 1 : arista.peso;
+                                }
+                            }
+
+                            // Asociar a los nodos
+                            indexNodo1 = nodos.findIndex(nodo => nodo.id == idNodo1);
+                            indexNodo2 = nodos.findIndex(nodo => nodo.id == idNodo2);
+                            if (indexNodo1 != indexNodo2)
+                                nodos[indexNodo1].aristas.push(arista);
+                            nodos[indexNodo2].aristas.push(arista);
 
                             // cerrar modal
                             $("#set_weight_cancel").trigger("click");
@@ -284,34 +317,35 @@ canvas.on("mousedown", ".nodo", function () {
                     // Dibujar Arista
                     g.appendChild(newArista);
                     canvas.prepend(g);
-                }
-                // Registar arista
-                aristas.push(arista);
 
-                // Actualizar LISTA ADYACENCIAS 
-                // Grafo Dirigido o Normal
-                if (idNodo1 in listaAdyacencias)
-                    listaAdyacencias[idNodo1][idNodo2] = 1;
-                else {
-                    listaAdyacencias[idNodo1] = {};
-                    listaAdyacencias[idNodo1][idNodo2] = 1;
-                }
-                // Solo si es un grafo normal
-                if (tipoGrafo == 1) {
-                    if (idNodo2 in listaAdyacencias)
-                        listaAdyacencias[idNodo2][idNodo1] = 1;
+                    // Registar arista
+                    aristas.push(arista);
+
+                    // Actualizar LISTA ADYACENCIAS 
+                    // Grafo Dirigido o Normal
+                    if (idNodo1 in listaAdyacencias)
+                        listaAdyacencias[idNodo1][idNodo2] = (arista.peso == null) ? 1 : arista.peso;
                     else {
-                        listaAdyacencias[idNodo2] = {};
-                        listaAdyacencias[idNodo2][idNodo1] = 1;
+                        listaAdyacencias[idNodo1] = {};
+                        listaAdyacencias[idNodo1][idNodo2] = (arista.peso == null) ? 1 : arista.peso;
                     }
-                }
+                    // Solo si es un grafo normal
+                    if (tipoGrafo == 1) {
+                        if (idNodo2 in listaAdyacencias)
+                            listaAdyacencias[idNodo2][idNodo1] = (arista.peso == null) ? 1 : arista.peso;
+                        else {
+                            listaAdyacencias[idNodo2] = {};
+                            listaAdyacencias[idNodo2][idNodo1] = (arista.peso == null) ? 1 : arista.peso;
+                        }
+                    }
 
-                // Asociar a los nodos
-                indexNodo1 = nodos.findIndex(nodo => nodo.id == idNodo1);
-                indexNodo2 = nodos.findIndex(nodo => nodo.id == idNodo2);
-                if (indexNodo1 != indexNodo2)
-                    nodos[indexNodo1].aristas.push(arista);
-                nodos[indexNodo2].aristas.push(arista);
+                    // Asociar a los nodos
+                    indexNodo1 = nodos.findIndex(nodo => nodo.id == idNodo1);
+                    indexNodo2 = nodos.findIndex(nodo => nodo.id == idNodo2);
+                    if (indexNodo1 != indexNodo2)
+                        nodos[indexNodo1].aristas.push(arista);
+                    nodos[indexNodo2].aristas.push(arista);
+                }
             }
 
             // reiniciar contadores de las aristas

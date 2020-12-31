@@ -32,3 +32,16 @@ function showModal(modal, title = null, closing = null, showed = null) {
         modal.off('click');
     });
 }
+
+const btnRun = $("#run");
+// Seleccionar nodo de inicio
+btnRun.click(function() {
+    elemento = 3;
+    $(".nodo").removeClass("nodoarista");
+    let idStartNodo = "";
+    canvas.find(".nodo").on("click", function(node) {
+        idStartNodo = $(node.target).attr("id");
+        BFS(idStartNodo);
+        canvas.find(".nodo").off("click");
+    });
+});
