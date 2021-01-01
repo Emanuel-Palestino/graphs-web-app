@@ -4,28 +4,67 @@
   box-sizing: border-box;
   list-style: none;
   text-decoration: none;
-  font-family: sans-serif;
+  font-family: monospace;
 }
 
-#opciones {
-  display: inline-flex;
-  gap: 10px;
+input:not([type=checkbox]), select {
+  border-radius: 4px;
+  min-height: 24px;
+  min-width: 60px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border: 1px solid #192a56;
+}
+
+h1 {
+  font-size: 30px;
+  text-align: center;
+  padding: 12px;
+}
+
+#menu {
+  position: relative;
+}
+#menu #config_grafo {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+#menu #config_grafo .option {
+  font-size: 16px;
+}
+#menu #opciones {
+  display: grid;
   width: 100%;
   height: auto;
+  justify-content: space-between;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 24px;
   padding: 12px;
+}
+#menu #opciones .modificacion, #menu #opciones .algoritmos {
+  display: flex;
+  flex-flow: wrap row;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .boton {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80px;
-  height: 60px;
-  padding: 6px;
+  min-width: 80px;
+  min-height: 40px;
+  padding: 12px;
   border-radius: 6px;
   color: white;
-  background-color: black;
-  text-align: center;
+  background-color: #192a56;
+  font-size: 14px;
 }
 
 #canvas {
@@ -71,6 +110,11 @@
   stroke-width: 5px;
 }
 
+#resultados h2 {
+  font-size: 26px;
+  padding: 8px;
+}
+
 .t-modal {
   opacity: 0;
   width: 100vw;
@@ -110,7 +154,6 @@
 }
 .t-modal .t-modal-content .t-modal-h p {
   margin: 0;
-  font-family: "Varela Round";
   font-size: 22px;
   color: #2C3E50;
   margin-right: 40px;

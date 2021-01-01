@@ -11,25 +11,31 @@
 </head>
 
 <body>
-    <h1>Aplicacion de Grafos</h1>
+    <h1>Creación de Grafos Y Ejecución de Algoritmos</h1>
     <section id="menu">
-        <div id="tipos">
-            <label for="grafo">Tipo de grafo: </label>
-            <select id="grafo">
-                <option value="1">Grafo Normal</option>
-                <option value="2">Grafo Dirigido</option>
-            </select>
+        <div id="config_grafo">
+            <div class="option">
+                <label for="grafo">Tipo de grafo: </label>
+                <select id="grafo">
+                    <option value="1">Grafo Normal</option>
+                    <option value="2">Grafo Dirigido</option>
+                </select>
+            </div>
 
-            <label for="ponderado">Ponderado(Pesado): </label>
-            <input type="checkbox" id="ponderado">
+            <div class="option">
+                <label for="ponderado">Ponderado(Pesado): </label>
+                <input type="checkbox" id="ponderado">
+            </div>
 
-            <label for="algoritmo">Tipo de algoritmo a utilizar: </label>
-            <select id="algoritmo">
-                <option value="1">BFS</option>
-                <option value="2">DFS</option>
-                <option value="3">otro</option>
-                <option value="4">otro</option>
-            </select>
+            <div class="option">
+                <label for="algoritmo">Tipo de algoritmo a utilizar: </label>
+                <select id="algoritmo">
+                    <option value="1">BFS</option>
+                    <option value="2">DFS</option>
+                    <option value="3">otro</option>
+                    <option value="4">otro</option>
+                </select>
+            </div>
 
             <!--<label for="orden">Orden en el que se toman las decisiones: </label>
             <select id="orden">
@@ -40,10 +46,17 @@
         </div>
 
         <div id="opciones">
-            <a href="javascript:void(0)" id="nodo" class="boton">Nodo</a>
-            <a href="javascript:void(0)" id="arista" class="boton">Arista</a>
-            <a href="javascript:void(0)" id="run" class="boton">Ejecutar algoritmo</a>
-            <a href="javascript:void(0)" id="restart" class="boton">Reiniciar Grafo</a>
+            <div class="modificacion">
+                <a href="javascript:void(0)" id="nodo" class="boton">Nodo</a>
+                <a href="javascript:void(0)" id="arista" class="boton">Arista</a>
+                <a href="javascript:void(0)" id="restart" class="boton">Reiniciar Grafo</a>
+            </div>
+            
+            <div class="algoritmos">
+                <a href="javascript:void(0)" id="run" class="boton">Ejecutar Algoritmo</a>
+                <a href="javascript:void(0)" id="pause" class="boton">Pausar Ejecucion</a>
+                <a href="javascript:void(0)" id="show_algorithm" class="boton">Ver Algoritmo</a>
+            </div>
         </div>
     </section>
 
@@ -62,6 +75,11 @@
             </text>
         </g>
     </svg>
+
+    <!-- RESULTS -->
+    <div id="resultados">
+        <h2>Resultados</h2>
+    </div>
 
     <!-- MODALS -->
     <div class="t-modal" id="rename_modal">
