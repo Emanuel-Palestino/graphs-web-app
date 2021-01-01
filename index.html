@@ -51,10 +51,11 @@
     <!-- CANVAS -->
     <svg id="canvas">
         <defs>
-            <marker id="arrowhead" orient="auto" markerWidth="6" markerHeight="4" refX="13" refY="2">
-                <path d="M0,0 V4 L6,2 Z" fill="gray"></path>
+            <marker id="arrowhead" orient="auto" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="12" refX="36" refY="6">
+                <path d="M0,0 V12 L20,6 Z" fill="black" stroke-width="3px"></path>
             </marker>
         </defs>
+
         <g id="template-textPath">
             <text>
                 <textPath href="#" startOffset="50%">0</textPath>
@@ -100,6 +101,7 @@
     <script src="js/main.js"></script>
     <script src="js/graphs.js"></script>
     <script src="js/BFS.js"></script>
+    <script src="js/DFS.js"></script>
 </body>
 
 </html>

@@ -41,6 +41,7 @@
     fill: black;
     font-size: 18px;
     pointer-events: none;
+    user-select: none;
 }
 
 .nodo {
@@ -52,9 +53,9 @@
     cursor: grab;
 }
 
-.nodo:active {
+/* .nodo:active {
     cursor: grabbing;
-}
+} */
 
 .nodoarista {
     cursor: pointer;

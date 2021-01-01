@@ -2,7 +2,7 @@ function BFS(start) {
     // La inicializacion de los atributos ya ha sido realizada
     // Se procede a hacer el recorrido
     let indexNode = nodos.findIndex(nodo => nodo.id == start);
-    // Pintar el grafo
+    // Pintar el nodo inicial
     $("#" + start).addClass("start");
 
     // Iniciamos el nodo de inicio
@@ -15,11 +15,11 @@ function BFS(start) {
     Q.push(nodos[indexNode]);
 
     // Iniciar recorrido
-    while(Q.length > 0) {
+    while (Q.length > 0) {
         // extrer el nodo de la cola
         let u = Q.pop();
         // Recorrer cada nodo adyacente al nodo U
-        for(idNode in listaAdyacencias[u.id]) {
+        for (idNode in listaAdyacencias[u.id]) {
             // obtener el index dentro de la lista de nodos
             let index = nodos.findIndex(nodo => nodo.id == idNode);
             if (nodos[index].estado == "no visitado") {

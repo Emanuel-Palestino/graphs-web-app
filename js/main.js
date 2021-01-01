@@ -36,12 +36,17 @@ function showModal(modal, title = null, closing = null, showed = null) {
 const btnRun = $("#run");
 // Seleccionar nodo de inicio
 btnRun.click(function() {
+    // evitar que se inicie el proceso de creacion de aristas
     elemento = 3;
     $(".nodo").removeClass("nodoarista");
+
     let idStartNodo = "";
     canvas.find(".nodo").on("click", function(node) {
         idStartNodo = $(node.target).attr("id");
-        BFS(idStartNodo);
+        if (algoritmo == 1) 
+            BFS(idStartNodo);
+        else if (algoritmo == 2)
+            DFS(idStartNodo);
         canvas.find(".nodo").off("click");
     });
 });

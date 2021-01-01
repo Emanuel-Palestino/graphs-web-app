@@ -4,6 +4,7 @@ const btnDelete = $("#delete");
 const canvas = $("#canvas");
 const btnRestart = $("#restart");
 let tipoGrafo = 1;
+let algoritmo = 1;
 let ponderado = false;
 
 var elemento = 0;
@@ -44,6 +45,11 @@ $("#ponderado").change(function () {
         ponderado = true;
     else
         ponderado = false;
+});
+
+// Detectar el tipo de algoritmo escogido
+$("#algoritmo").change(function () {
+    algoritmo = parseInt($(this).val());
 });
 
 // Crear un nodo dentro del lienzo
