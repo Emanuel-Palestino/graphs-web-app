@@ -43,13 +43,15 @@ const btnRun = $("#run");
 // Seleccionar nodo de inicio
 btnRun.click(function() {
     // evitar que se inicie el proceso de creacion de aristas
+    $(".boton-selected").removeClass("boton-selected");
+    btnRun.addClass("boton-selected");
     elemento = 3;
-    $(".nodo").removeClass("nodoarista");
+    $(".nodo").addClass("nodoarista");
 
     let idStartNodo = "";
     canvas.find(".nodo").on("click", function(node) {
         idStartNodo = $(node.target).attr("id");
-        if (algoritmo == 1) 
+        if (algoritmo == 1)
             BFS(idStartNodo);
         else if (algoritmo == 2)
             DFS(idStartNodo);

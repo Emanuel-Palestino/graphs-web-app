@@ -37,4 +37,22 @@ function BFS(start) {
         }
         u.estado = "finalizado";
     }
+
+    btnRun.removeClass("boton-selected");
+
+    // Mostrar la tabla de resultados
+    let filaNodos = $("#resultados table tr:nth-child(1)");
+    let filaDistancia = $("#resultados table tr:nth-child(2)");
+    let filaPredecesor = $("#resultados table tr:nth-child(3)");
+
+    // Imprimir Encabezados
+    filaNodos.append('<th>NODO(v)</th>');
+    filaDistancia.append('<th>DISTANCIA(d)</th>');
+    filaPredecesor.append('<th>PREDECESOR(π)</th>');
+
+    nodos.forEach(nodo => {
+        filaNodos.append(`<td>${nodo.id}</td>`);
+        filaDistancia.append(`<td>${nodo.distancia}</td>`);
+        filaPredecesor.append(`<td>${nodo.predecesor}</td>`);
+    });
 }

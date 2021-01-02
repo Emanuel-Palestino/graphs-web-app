@@ -1,6 +1,5 @@
 const btnNodo = $("#nodo");
 const btnArista = $("#arista");
-const btnDelete = $("#delete");
 const canvas = $("#canvas");
 const btnRestart = $("#restart");
 let tipoGrafo = 1;
@@ -24,12 +23,16 @@ let margenCanvas = canvas.offset();
 btnNodo.click(function () {
     elemento = 1;
     aristaFlag = 0;
+    $(".boton-selected").removeClass("boton-selected");
+    btnNodo.addClass("boton-selected");
     // clase para cambiar la vista del cursor
     $(".nodo").removeClass(["nodoarista"]);
 });
 btnArista.click(function () {
     elemento = 2;
     aristaFlag = 0;
+    $(".boton-selected").removeClass("boton-selected");
+    btnArista.addClass("boton-selected");
     // clase para cambiar la vista del cursor
     $(".nodo").addClass("nodoarista");
 });
@@ -37,6 +40,7 @@ btnArista.click(function () {
 // Detectar que tipo de grafo se va a dibujar
 $("#grafo").change(function () {
     tipoGrafo = parseInt($(this).val());
+    $(this).parent().addClass("boton-disabled");
 });
 
 // Saber si es ponderado o no
@@ -45,6 +49,7 @@ $("#ponderado").change(function () {
         ponderado = true;
     else
         ponderado = false;
+        $("#grafo, #ponderado").parent().addClass("boton-disabled");
 });
 
 // Detectar el tipo de algoritmo escogido
@@ -363,5 +368,7 @@ canvas.on("mousedown", ".nodo", function () {
 
 // Reiniciar Dibujo de Grafo
 btnRestart.click(function () {
+    $(".boton-selected").removeClass("boton-selected");
+    btnRestart.addClass("boton-selected");
     window.location.reload();
 });
