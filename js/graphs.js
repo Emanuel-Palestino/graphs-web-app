@@ -128,7 +128,7 @@ canvas.on("mousedown", ".nodo", function () {
             // conseguir los grados de rotacion del peso (funciona en dos lineas ya que el peso solo tiene dos estados)
             if (currentArista.next().css("transform") != undefined) {
                 let values = currentArista.next().css("transform").split('(')[1].split(')')[0].split(',');
-                let deg = (values[0] == "1") ? 0 : 180;
+                deg = (values[0] == "1") ? 0 : 180;
             }
 
             // identificar que coordenadas se van a modificar
