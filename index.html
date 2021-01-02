@@ -12,23 +12,24 @@
 
 <body>
     <h1>Creación de Grafos Y Ejecución de Algoritmos</h1>
+
     <section id="menu">
         <div id="config_grafo">
             <div class="option">
-                <label for="grafo">Tipo de grafo: </label>
+                <label for="grafo">Tipo de Grafo: </label>
                 <select id="grafo">
                     <option value="1">Grafo Normal</option>
                     <option value="2">Grafo Dirigido</option>
                 </select>
             </div>
 
-            <div class="option">
+            <div class="option w-check">
                 <label for="ponderado">Ponderado(Pesado): </label>
                 <input type="checkbox" id="ponderado">
             </div>
 
             <div class="option">
-                <label for="algoritmo">Tipo de algoritmo a utilizar: </label>
+                <label for="algoritmo">Algoritmo a Ejecutar: </label>
                 <select id="algoritmo">
                     <option value="1">BFS</option>
                     <option value="2">DFS</option>
@@ -36,13 +37,6 @@
                     <option value="4">otro</option>
                 </select>
             </div>
-
-            <!--<label for="orden">Orden en el que se toman las decisiones: </label>
-            <select id="orden">
-                <option value="1">Descendente</option>
-                <option value="2">Ascendente</option>
-                <option value="3">Personalizado</option>
-            </select>-->
         </div>
 
         <div id="opciones">
@@ -55,6 +49,7 @@
             <div class="algoritmos">
                 <a href="javascript:void(0)" id="run" class="boton">Ejecutar Algoritmo</a>
                 <a href="javascript:void(0)" id="pause" class="boton">Pausar Ejecucion</a>
+                <a href="javascript:void(0)" id="pause" class="boton">Detener Ejecucion</a>
                 <a href="javascript:void(0)" id="show_algorithm" class="boton">Ver Algoritmo</a>
             </div>
         </div>
@@ -82,36 +77,36 @@
     </div>
 
     <!-- MODALS -->
-    <div class="t-modal" id="rename_modal">
-        <div class="t-modal-content">
-            <div class="t-modal-h center">
+    <div class="modal" id="rename_modal">
+        <div class="modal-content">
+            <div class="modal-header center">
                 <p>Nombra el Nodo Creado</p>
             </div>
-            <div class="t-modal-b card-1">
+            <div class="modal-body">
                 <form id="rename_form">
                     <input type="text" id="nodoName" class="" autocomplete="off">
                 </form>
             </div>
-            <div class="t-modal-f">
+            <div class="modal-footer">
                 <input type="submit" value="Hecho" form="rename_form" class="boton">
-                <a href="javascript:void(0)" class="boton" id="rename_cancel">Cancelar</a>
+                <a href="javascript:void(0)" class="boton cerrar-modal" id="rename_cancel">Cancelar</a>
             </div>
         </div>
     </div>
 
-    <div class="t-modal" id="set_weight_modal">
-        <div class="t-modal-content">
-            <div class="t-modal-h center">
+    <div class="modal" id="set_weight_modal">
+        <div class="modal-content">
+            <div class="modal-header center">
                 <p>Ingresa el Peso de la arista</p>
             </div>
-            <div class="t-modal-b card-1">
+            <div class="modal-body card-1">
                 <form id="set_weight_form">
-                    <input type="number" id="weight" class="" autocomplete="off" step="0.01">
+                    <input type="number" id="weight" autocomplete="off" step="0.01">
                 </form>
             </div>
-            <div class="t-modal-f">
+            <div class="modal-footer">
                 <input type="submit" value="Hecho" form="set_weight_form" class="boton">
-                <a href="javascript:void(0)" class="boton hide" id="set_weight_cancel">Cancelar</a>
+                <a href="javascript:void(0)" class="boton cerrar-modal" id="set_weight_cancel">Cancelar</a>
             </div>
         </div>
     </div>

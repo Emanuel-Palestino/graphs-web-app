@@ -7,15 +7,27 @@
   font-family: monospace;
 }
 
-input:not([type=checkbox]), select {
+input:not([type=checkbox]):not([type=submit]), select {
   border-radius: 4px;
-  min-height: 24px;
-  min-width: 60px;
+  min-height: 28px;
+  min-width: 70px;
+  font-size: 14px;
+  padding: 4px;
 }
 
 input:focus, select:focus {
   outline: none;
   border: 1px solid #192a56;
+}
+
+input[type=checkbox] {
+  width: 18px;
+  height: 18px;
+}
+
+input[type=submit] {
+  border: none;
+  cursor: pointer;
 }
 
 h1 {
@@ -37,6 +49,11 @@ h1 {
 #menu #config_grafo .option {
   font-size: 16px;
 }
+#menu #config_grafo .w-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 #menu #opciones {
   display: grid;
   width: 100%;
@@ -52,6 +69,7 @@ h1 {
   flex-flow: wrap row;
   justify-content: space-evenly;
   align-items: center;
+  row-gap: 10px;
 }
 
 .boton {
@@ -115,7 +133,7 @@ h1 {
   padding: 8px;
 }
 
-.t-modal {
+.modal {
   opacity: 0;
   width: 100vw;
   height: 100vh;
@@ -129,7 +147,7 @@ h1 {
   justify-content: center;
   align-items: center;
 }
-.t-modal .t-modal-content {
+.modal .modal-content {
   min-width: 350px;
   min-height: 200px;
   max-width: 80%;
@@ -144,7 +162,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
-.t-modal .t-modal-content .t-modal-h {
+.modal .modal-content .modal-header {
   width: 100%;
   margin-bottom: 14px;
   display: flex;
@@ -152,13 +170,13 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
-.t-modal .t-modal-content .t-modal-h p {
+.modal .modal-content .modal-header p {
   margin: 0;
   font-size: 22px;
   color: #2C3E50;
   margin-right: 40px;
 }
-.t-modal .t-modal-content .t-modal-h button {
+.modal .modal-content .modal-header button {
   width: 38px;
   height: 38px;
   background-color: transparent;
@@ -166,16 +184,19 @@ h1 {
   font-size: 28px;
   line-height: 0;
 }
-.t-modal .t-modal-content .t-modal-h button:focus {
+.modal .modal-content .modal-header button:focus {
   border: none;
   outline: none;
 }
-.t-modal .t-modal-content .t-modal-b {
+.modal .modal-content .modal-body {
   width: 100%;
   max-height: 500px;
   overflow-y: auto;
 }
-.t-modal .t-modal-content .t-modal-f {
+.modal .modal-content .modal-body input[type=text], .modal .modal-content .modal-body input[type=number] {
+  width: 100%;
+}
+.modal .modal-content .modal-footer {
   margin-top: 18px;
   width: 100%;
   display: flex;
@@ -183,7 +204,7 @@ h1 {
   justify-content: flex-end;
   align-items: center;
 }
-.t-modal .t-modal-content a:last-child {
+.modal .modal-content a:last-child {
   margin-left: 6px;
 }
 
@@ -193,4 +214,8 @@ h1 {
 
 .hide {
   display: none;
+}
+
+.center {
+  text-align: center;
 }

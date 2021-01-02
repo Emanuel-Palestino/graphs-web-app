@@ -55,15 +55,15 @@ $("#algoritmo").change(function () {
 // Crear un nodo dentro del lienzo
 canvas.click(function (event) {
     let cursorX = parseFloat(event.clientX - margenCanvas.left).toFixed(3);
-    let cursorY = parseFloat(event.clientY - margenCanvas.top).toFixed(3);
+    let cursorY = parseFloat(event.clientY - margenCanvas.top + $(document).scrollTop()).toFixed(3);
     if (elemento == 1 && !$(event.target).hasClass("nodo")) {
         // Nombrar al nodo
         let inputName = $("#nodoName");
         showModal($("#rename_modal"), null, () => {
+            inputName.focus();
+        }, () => {
             inputName.val("");
             $("#rename_form").off("submit");
-        }, function () {
-            inputName.focus();
         });
 
         $("#rename_form").on('submit', function (e) {
@@ -158,7 +158,7 @@ canvas.on("mousedown", ".nodo", function () {
 
         canvas.on("mousemove", function (event) {
             let currentX = parseFloat(event.clientX - margenCanvas.left).toFixed(3);
-            let currentY = parseFloat(event.clientY - margenCanvas.top).toFixed(3);
+            let currentY = parseFloat(event.clientY - margenCanvas.top + $(document).scrollTop()).toFixed(3);
             // Mover nodo
             nodo.css({
                 cx: currentX,
@@ -254,10 +254,10 @@ canvas.on("mousedown", ".nodo", function () {
                 if (ponderado) {
                     let inputWeight = $("#weight");
                     showModal($("#set_weight_modal"), null, () => {
+                        inputWeight.focus();
+                    }, () => {
                         inputWeight.val("");
                         $("#set_weight_form").off("submit");
-                    }, function () {
-                        inputWeight.focus();
                     });
 
                     let thisx0 = parseFloat(x0), thisx1 = parseFloat(x1), thisy0 = parseFloat(y0), thisy1 = parseFloat(y1);
