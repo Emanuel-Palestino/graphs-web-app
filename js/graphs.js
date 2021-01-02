@@ -100,6 +100,7 @@ canvas.click(function (event) {
                     id: name,
                     estado: "no visitado",
                     distancia: Infinity,
+                    finalizado: 0,
                     predecesor: null,
                     aristas: []
                 }

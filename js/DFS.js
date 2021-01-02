@@ -1,7 +1,7 @@
 function DFS(start) {
     // La inicializacion de los atributos ya ha sido realizada
     // Se procede a hacer el recorrido
-    let time = 0;
+    let time = [0];
 
     // modificar el array para que inicie con el nodo seleccionado
     let indexStart = nodos.findIndex(nodo => nodo.id == start);
@@ -17,12 +17,32 @@ function DFS(start) {
         if (u.estado == "no visitado")
             DFS_Visit(u, time);
     });
+
+    // Mostrar la tabla de resultados
+    $('#resultados table').append('<tr></tr>');
+    let filaNodos = $("#resultados table tr:nth-child(1)");
+    let filaDistancia = $("#resultados table tr:nth-child(2)");
+    let filaFinalizado = $("#resultados table tr:nth-child(3)");
+    let filaPredecesor = $("#resultados table tr:nth-child(4)");
+
+    // Imprimir Encabezados
+    filaNodos.append('<th>NODO(v)</th>');
+    filaDistancia.append('<th>DISTANCIA(d)</th>');
+    filaFinalizado.append('<th>FINALIZADO(f)</th>');
+    filaPredecesor.append('<th>PREDECESOR(π)</th>');
+
+    nodos.forEach(nodo => {
+        filaNodos.append(`<td>${nodo.id}</td>`);
+        filaDistancia.append(`<td>${nodo.distancia}</td>`);
+        filaFinalizado.append(`<td>${nodo.finalizado}</td>`);
+        filaPredecesor.append(`<td>${nodo.predecesor}</td>`);
+    });
 }
 
 function DFS_Visit(node, time) {
     node.estado = "visitado";
-    time++;
-    node.distancia = time;
+    time[0]++;
+    node.distancia = time[0];
     for (idNode in listaAdyacencias[node.id]) {
         // obtener el index dentro de la lista de nodos
         let index = nodos.findIndex(nodo => nodo.id == idNode);
@@ -38,6 +58,6 @@ function DFS_Visit(node, time) {
         }
     }
     node.estado = "finalizado";
-    time++;
-    // node.f = time;
+    time[0]++;
+    node.finalizado = time[0];
 }
