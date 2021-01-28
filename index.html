@@ -16,6 +16,8 @@
     <!-- MENU -->
     <section id="menu">
         <div id="config_grafo">
+            <h3 class="text-simbolo"><span>🔩</span> Configuracion <span>🔩</span></h3>
+            
             <div class="option">
                 <label for="grafo">Tipo de Grafo: </label>
                 <select id="grafo">
@@ -38,20 +40,31 @@
                     <option value="4">otro</option>
                 </select>
             </div>
+
+            <div class="option w-check">
+                <label for="autonombrar">Nombre Automático(Numeros): </label>
+                <input type="checkbox" id="autonombrar">
+            </div>
+
+            <div class="finalizar">
+                <a href="javascript:void(0)" id="config_final" class="boton">Finalizar</a>
+            </div>
         </div>
 
         <div id="opciones">
             <div class="modificacion">
-                <a href="javascript:void(0)" id="nodo" class="boton">Nodo</a>
-                <a href="javascript:void(0)" id="arista" class="boton">Arista</a>
-                <a href="javascript:void(0)" id="restart" class="boton">Reiniciar Grafo</a>
+                <h3>✍ Grafo ✍</h3>
+                <a href="javascript:void(0)" id="nodo" class="boton boton-disabled">Nodo</a>
+                <a href="javascript:void(0)" id="arista" class="boton boton-disabled">Arista</a>
+                <a href="javascript:void(0)" id="restart" class="boton boton-disabled">Reiniciar Grafo</a>
             </div>
             
             <div class="algoritmos">
-                <a href="javascript:void(0)" id="run" class="boton">Ejecutar Algoritmo</a>
-                <a href="javascript:void(0)" id="pause" class="boton">Pausar Ejecucion</a>
-                <a href="javascript:void(0)" id="pause" class="boton">Detener Ejecucion</a>
-                <a href="javascript:void(0)" id="show_algorithm" class="boton">Ver Algoritmo</a>
+                <h3 class="text-simbolo"><span>🔧</span>Algoritmo<span>🔧</span></h3>
+                <a href="javascript:void(0)" id="run" class="boton simbolo boton-disabled"><span>▶️</span></a>
+                <a href="javascript:void(0)" id="pause" class="boton simbolo boton-disabled"><span>⏸</span></a>
+                <a href="javascript:void(0)" id="pause" class="boton simbolo boton-disabled"><span>⏹</span></a>
+                <a href="javascript:void(0)" id="show_algorithm" class="boton boton-disabled">Ver Algoritmo</a>
             </div>
         </div>
     </section>

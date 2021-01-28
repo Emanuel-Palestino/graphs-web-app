@@ -5,6 +5,8 @@ const btnRestart = $("#restart");
 let tipoGrafo = 1;
 let algoritmo = 1;
 let ponderado = false;
+let autonombrar = false;
+let contadorNodos = 1;
 
 var elemento = 0;
 var contadorAristas = -1;
@@ -40,7 +42,6 @@ btnArista.click(function () {
 // Detectar que tipo de grafo se va a dibujar
 $("#grafo").change(function () {
     tipoGrafo = parseInt($(this).val());
-    $(this).parent().addClass("boton-disabled");
 });
 
 // Saber si es ponderado o no
@@ -49,7 +50,6 @@ $("#ponderado").change(function () {
         ponderado = true;
     else
         ponderado = false;
-        $("#grafo, #ponderado").parent().addClass("boton-disabled");
 });
 
 // Detectar el tipo de algoritmo escogido
@@ -57,60 +57,109 @@ $("#algoritmo").change(function () {
     algoritmo = parseInt($(this).val());
 });
 
+// Saber si se nombrará automaticamente
+$("#autonombrar").change(function () {
+    if ($("#autonombrar:checked").val() != undefined)
+        autonombrar = true;
+    else
+        autonombrar = false;
+});
+
+// Finalizar configuracion
+$("#config_final").click(function () {
+    $("#config_grafo").children().addClass("boton-disabled");
+    $(".modificacion, .algoritmos").children().removeClass("boton-disabled");
+});
+
 // Crear un nodo dentro del lienzo
 canvas.click(function (event) {
     let cursorX = parseFloat(event.clientX - margenCanvas.left).toFixed(3);
     let cursorY = parseFloat(event.clientY - margenCanvas.top + $(document).scrollTop()).toFixed(3);
     if (elemento == 1 && !$(event.target).hasClass("nodo")) {
-        // Nombrar al nodo
-        let inputName = $("#nodoName");
-        showModal($("#rename_modal"), null, () => {
-            inputName.focus();
-        }, () => {
-            inputName.val("");
-            $("#rename_form").off("submit");
-        });
 
-        $("#rename_form").on('submit', function (e) {
-            e.preventDefault();
-            let name = inputName.val();
-            if (name != '') {
-                // Se crea el HTML para el nodo
-                let g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-                g.setAttribute("class", "full-nodo");
-
-                let nodeName = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-                nodeName.setAttribute("x", cursorX);
-                nodeName.setAttribute("y", cursorY - 26);
-                nodeName.setAttribute("for-node", name);
-
-                let newNodo = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-                newNodo.setAttribute("class", "nodo");
-                newNodo.setAttribute("id", name);
-                newNodo.setAttribute("style", `cx: ${cursorX}px; cy: ${cursorY}px;`);
-
-                nodeName.textContent = name;
-                g.appendChild(newNodo);
-                g.appendChild(nodeName);
-                // Añadir nodo al DOM y definir sus coordenas
-                canvas.append(g);
-
-                // Registrar nodo en el programa
-                let nodo = {
-                    id: name,
-                    estado: "no visitado",
-                    distancia: Infinity,
-                    finalizado: 0,
-                    predecesor: null,
-                    aristas: []
-                }
-                nodos.push(nodo);
-
-                // cerrar modal
-                $("#rename_cancel").trigger("click");
+        if (!autonombrar) {
+            // Nombrar al nodo
+            let inputName = $("#nodoName");
+            showModal($("#rename_modal"), null, () => {
+                inputName.focus();
+            }, () => {
+                inputName.val("");
                 $("#rename_form").off("submit");
+            });
+
+            $("#rename_form").on('submit', function (e) {
+                e.preventDefault();
+                let name = inputName.val();
+                if (name != '') {
+                    // Se crea el HTML para el nodo
+                    let g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+                    g.setAttribute("class", "full-nodo");
+
+                    let nodeName = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+                    nodeName.setAttribute("x", cursorX);
+                    nodeName.setAttribute("y", cursorY - 26);
+                    nodeName.setAttribute("for-node", name);
+
+                    let newNodo = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+                    newNodo.setAttribute("class", "nodo");
+                    newNodo.setAttribute("id", name);
+                    newNodo.setAttribute("style", `cx: ${cursorX}px; cy: ${cursorY}px;`);
+
+                    nodeName.textContent = name;
+                    g.appendChild(newNodo);
+                    g.appendChild(nodeName);
+                    // Añadir nodo al DOM y definir sus coordenas
+                    canvas.append(g);
+
+                    // Registrar nodo en el programa
+                    let nodo = {
+                        id: name,
+                        estado: "no visitado",
+                        distancia: Infinity,
+                        finalizado: 0,
+                        predecesor: null,
+                        aristas: []
+                    }
+                    nodos.push(nodo);
+
+                    // cerrar modal
+                    $("#rename_cancel").trigger("click");
+                    $("#rename_form").off("submit");
+                }
+            });
+        } else {
+            // Se crea el HTML para el nodo
+            let g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+            g.setAttribute("class", "full-nodo");
+
+            let nodeName = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+            nodeName.setAttribute("x", cursorX);
+            nodeName.setAttribute("y", cursorY - 26);
+            nodeName.setAttribute("for-node", contadorNodos);
+
+            let newNodo = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+            newNodo.setAttribute("class", "nodo");
+            newNodo.setAttribute("id", contadorNodos);
+            newNodo.setAttribute("style", `cx: ${cursorX}px; cy: ${cursorY}px;`);
+
+            nodeName.textContent = contadorNodos;
+            g.appendChild(newNodo);
+            g.appendChild(nodeName);
+            // Añadir nodo al DOM y definir sus coordenas
+            canvas.append(g);
+
+            // Registrar nodo en el programa
+            let nodo = {
+                id: contadorNodos,
+                estado: "no visitado",
+                distancia: Infinity,
+                finalizado: 0,
+                predecesor: null,
+                aristas: []
             }
-        });
+            nodos.push(nodo);
+            contadorNodos++;
+        }
     }
 });
 
@@ -266,7 +315,10 @@ canvas.on("mousedown", ".nodo", function () {
                         $("#set_weight_form").off("submit");
                     });
 
-                    let thisx0 = parseFloat(x0), thisx1 = parseFloat(x1), thisy0 = parseFloat(y0), thisy1 = parseFloat(y1);
+                    let thisx0 = parseFloat(x0),
+                        thisx1 = parseFloat(x1),
+                        thisy0 = parseFloat(y0),
+                        thisy1 = parseFloat(y1);
 
                     $("#set_weight_form").on("submit", function (e) {
                         e.preventDefault();

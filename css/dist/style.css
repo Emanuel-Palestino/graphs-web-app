@@ -41,7 +41,8 @@ h1 {
 }
 #menu #config_grafo {
   display: flex;
-  gap: 24px;
+  gap: 12px 24px;
+  flex-flow: wrap row;
   justify-content: center;
   align-items: center;
   padding: 12px;
@@ -53,6 +54,18 @@ h1 {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+#menu #config_grafo h3 {
+  flex-basis: 100%;
+  font-size: 18px;
+  text-align: center;
+}
+#menu #config_grafo .finalizar {
+  flex-basis: 100%;
+}
+#menu #config_grafo .finalizar a {
+  width: 100px;
+  margin: 0 auto;
 }
 #menu #opciones {
   display: grid;
@@ -67,9 +80,14 @@ h1 {
 #menu #opciones .modificacion, #menu #opciones .algoritmos {
   display: flex;
   flex-flow: wrap row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  row-gap: 10px;
+  gap: 10px 20px;
+}
+#menu #opciones .modificacion h3, #menu #opciones .algoritmos h3 {
+  flex-basis: 100%;
+  font-size: 18px;
+  text-align: center;
 }
 
 .boton {
@@ -98,6 +116,24 @@ h1 {
 .boton-selected {
   background-color: #0097e6;
   transition: all 100ms;
+}
+
+.simbolo {
+  padding: 6px;
+}
+.simbolo span {
+  font-size: 22px;
+  margin-top: -3px;
+}
+
+.text-simbolo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text-simbolo span {
+  margin-left: 6px;
+  margin-right: 6px;
 }
 
 #canvas {
