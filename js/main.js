@@ -1,4 +1,5 @@
 $('.modal').hide();
+const btnRun = $("#ejecutar_algoritmo1");
 
 // MODAL
 function showModal(modal, title = null, showed = null, closing = null) {
@@ -38,10 +39,39 @@ function showModal(modal, title = null, showed = null, closing = null) {
     });
 }
 
+// BOTONES SELECCIONADOS
+$('.boton-menu').click(function () {
+    $('.boton-menu').removeClass('activo');
+    $(this).addClass('activo');
+});
+
+// DESPLEGAR MENU DE OPCIONES
+$('#opciones').click(function () {
+    $('#opciones_menu').slideToggle(200, function() {
+        if ($('#opciones_menu').attr('style') == 'display: none;')
+            $('#opciones').removeClass('activo');
+    });
+});
+// OCULTAR MENU DE OPCIONES
+$('body').on("click", function (element) {
+    let opciones = $('#opciones');
+    if (element.target != opciones[0]) {
+        $('#opciones_menu').slideUp(200, function() {
+            opciones.removeClass('activo');
+        });
+    }
+});
+
+// CONFIGURACION INICIAL
+$('#nuevo_grafo').click(function() {
+    showModal($('#modal_configuracion_inicial'), null, () => {
+        // Limpiar los inputs
+    });
+});
+
 // EJECUTAR EL ALGORITMO SELECCIONADO
-const btnRun = $("#run");
-// Seleccionar nodo de inicio
-btnRun.click(function() {
+btnRun.click(function () {
+    // Seleccionar nodo de inicio
     // evitar que se inicie el proceso de creacion de aristas
     $(".boton-selected").removeClass("boton-selected");
     btnRun.addClass("boton-selected");
@@ -49,7 +79,7 @@ btnRun.click(function() {
     $(".nodo").addClass("nodoarista");
 
     let idStartNodo = "";
-    canvas.find(".nodo").on("click", function(node) {
+    canvas.find(".nodo").on("click", function (node) {
         idStartNodo = $(node.target).attr("id");
         if (algoritmo == 1)
             BFS(idStartNodo);

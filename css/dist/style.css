@@ -4,10 +4,11 @@
   box-sizing: border-box;
   list-style: none;
   text-decoration: none;
-  font-family: monospace;
+  font-family: system-ui, sans-serif;
 }
 
-input:not([type=checkbox]):not([type=submit]), select {
+input:not([type=checkbox]):not([type=submit]),
+select {
   border-radius: 4px;
   min-height: 28px;
   min-width: 70px;
@@ -15,7 +16,8 @@ input:not([type=checkbox]):not([type=submit]), select {
   padding: 4px;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   outline: none;
   border: 1px solid #192a56;
 }
@@ -33,61 +35,133 @@ input[type=submit] {
 h1 {
   font-size: 30px;
   text-align: center;
-  padding: 12px;
+  padding: 6px 0px 16px 0px;
+  background-color: #192a56;
+  color: white;
 }
 
 #menu {
   position: relative;
-}
-#menu #config_grafo {
+  background-color: #192a56;
   display: flex;
-  gap: 12px 24px;
   flex-flow: wrap row;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  padding: 12px;
+  column-gap: 20px;
+  padding-top: 10px;
+  padding-left: 6px;
+  /* #config_grafo {
+      display: flex;
+      gap: 12px 24px;
+      flex-flow: wrap row;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+
+      h3 {
+          flex-basis: 100%;
+          font-size: 18px;
+          text-align: center;
+      }
+
+      .finalizar {
+          flex-basis: 100%;
+
+          a {
+              width: 100px;
+              margin: 0 auto;
+          }
+      }
+  }
+
+  #opciones {
+      display: grid;
+      width: 100%;
+      height: auto;
+      justify-content: space-between;
+      align-items: center;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 24px;
+      padding: 12px;
+
+      .modificacion, .algoritmos {
+          display: flex;
+          flex-flow: wrap row;
+          justify-content: center;
+          align-items: center;
+          gap: 10px 20px;
+
+          h3{
+              flex-basis: 100%;
+              font-size: 18px;
+              text-align: center;
+          }
+      }
+  } */
 }
-#menu #config_grafo .option {
+#menu #opciones_menu {
+  position: absolute;
+  display: none;
+  top: 54px;
+  left: 6px;
+  width: 180px;
+  border-radius: 0px 0px 6px 6px;
+  background-color: #192a56;
+}
+#menu #opciones_menu a {
+  display: block;
+  color: white;
   font-size: 16px;
-}
-#menu #config_grafo .w-check {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-#menu #config_grafo h3 {
-  flex-basis: 100%;
-  font-size: 18px;
-  text-align: center;
-}
-#menu #config_grafo .finalizar {
-  flex-basis: 100%;
-}
-#menu #config_grafo .finalizar a {
-  width: 100px;
-  margin: 0 auto;
-}
-#menu #opciones {
-  display: grid;
-  width: 100%;
-  height: auto;
-  justify-content: space-between;
-  align-items: center;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 24px;
   padding: 12px;
 }
-#menu #opciones .modificacion, #menu #opciones .algoritmos {
+#menu #opciones_menu a:hover {
+  background-color: #0f1931;
+  transition: all 200ms;
+}
+#menu #opciones_menu a:last-child {
+  border-radius: 0px 0px 6px 6px;
+}
+#menu .boton-menu {
+  padding: 10px 15px 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 300ms;
+}
+#menu .boton-menu span {
+  display: block;
+  color: white;
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  pointer-events: none;
+}
+#menu .boton-menu:hover {
+  background-color: #0f1931;
+}
+#menu .activo {
+  background-color: #0097e6 !important;
+}
+#menu .grupo-opciones {
   display: flex;
   flex-flow: wrap row;
-  justify-content: center;
   align-items: center;
-  gap: 10px 20px;
+  position: relative;
 }
-#menu #opciones .modificacion h3, #menu #opciones .algoritmos h3 {
-  flex-basis: 100%;
-  font-size: 18px;
+#menu .grupo-opciones::before {
+  content: attr(tag);
+  position: absolute;
+  width: 100%;
+  height: 14px;
+  top: -16px;
+  color: #ccc;
+  font-size: 12px;
   text-align: center;
+}
+#menu #dibujar_arista span {
+  transform: rotate(45deg);
+}
+#menu #paso_atras span {
+  transform: rotate(180deg);
 }
 
 .boton {
@@ -96,50 +170,27 @@ h1 {
   align-items: center;
   min-width: 80px;
   min-height: 40px;
-  padding: 12px;
-  border-radius: 16px;
+  padding: 6px 16px 6px 16px;
+  border-radius: 12px;
   color: white;
   background-color: #192a56;
-  font-size: 14px;
+  font-size: 16px;
 }
-
 .boton:active {
   transform: scale(0.95);
   transition: all 100ms;
 }
 
-.boton-disabled {
+.desabilitado {
   pointer-events: none;
   opacity: 0.6;
 }
 
-.boton-selected {
-  background-color: #0097e6;
-  transition: all 100ms;
-}
-
-.simbolo {
-  padding: 6px;
-}
-.simbolo span {
-  font-size: 22px;
-  margin-top: -3px;
-}
-
-.text-simbolo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.text-simbolo span {
-  margin-left: 6px;
-  margin-right: 6px;
-}
-
 #canvas {
   width: 100%;
-  height: 80vh;
-  border: 1px solid black;
+  height: 82vh;
+  background-color: #e2e2e2;
+  border-bottom: 1px solid #cccccc;
 }
 
 .full-nodo text {
@@ -202,7 +253,8 @@ h1 {
   border: 1px solid gray;
   border-collapse: collapse;
 }
-#resultados .table td, #resultados .table th {
+#resultados .table td,
+#resultados .table th {
   border: 1px solid gray;
   padding: 8px;
   text-align: center;
@@ -227,12 +279,12 @@ h1 {
   align-items: center;
 }
 .modal .modal-content {
-  min-width: 350px;
+  min-width: 400px;
   min-height: 200px;
   max-width: 80%;
   max-height: 85%;
   background-color: white;
-  padding: 18px;
+  padding: 20px;
   border-radius: 6px;
   margin-top: -150px;
   transition: all 300ms;
@@ -246,45 +298,48 @@ h1 {
   margin-bottom: 14px;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 .modal .modal-content .modal-header p {
   margin: 0;
   font-size: 22px;
-  color: #2C3E50;
-  margin-right: 40px;
-}
-.modal .modal-content .modal-header button {
-  width: 38px;
-  height: 38px;
-  background-color: transparent;
-  border: none;
-  font-size: 28px;
-  line-height: 0;
-}
-.modal .modal-content .modal-header button:focus {
-  border: none;
-  outline: none;
+  font-weight: bold;
 }
 .modal .modal-content .modal-body {
   width: 100%;
   max-height: 500px;
   overflow-y: auto;
 }
-.modal .modal-content .modal-body input[type=text], .modal .modal-content .modal-body input[type=number] {
-  width: 100%;
+.modal .modal-content .modal-body form {
+  display: flex;
+  flex-flow: column wrap;
+  row-gap: 36px;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin: 24px;
+}
+.modal .modal-content .modal-body form .seccion {
+  display: flex;
+  flex-flow: column wrap;
+  row-gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.modal .modal-content .modal-body form .seccion .con-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .modal .modal-content .modal-footer {
-  margin-top: 18px;
+  margin-top: 20px;
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-}
-.modal .modal-content a:last-child {
-  margin-left: 6px;
+  column-gap: 12px;
 }
 
 .no-scroll {

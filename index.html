@@ -7,6 +7,7 @@
     <meta name="author" content="Emanuel">
     <script src="js/jquery-3.5.1.min.js"></script>
     <link rel="stylesheet" href="css/dist/style.css">
+    <link href="css/ui-icons/css/uicons-regular-rounded.css" rel="stylesheet">
     <title>Aplicacion de Grafos</title>
 </head>
 
@@ -15,9 +16,57 @@
 
     <!-- MENU -->
     <section id="menu">
-        <div id="config_grafo">
+
+        <div id="opciones" target="opciones_menu" class="boton-menu">
+            <span class="fi fi-rr-menu-burger"></span>
+        </div>
+        <div id="opciones_menu">
+            <a href="javascript:void(0)" id="nuevo_grafo">Nuevo Grafo</a>
+            <a href="javascript:void(0)" id="reiniciar_grafo">Reinciar Grafo</a>
+        </div>
+
+        <!-- Opciones Grafo -->
+        <div class="grupo-opciones" tag="Grafo">
+            <div id="dibujar_nodo" class="boton-menu">
+                <span class="fi fi-rr-circle"></span>
+            </div>
+
+            <div id="dibujar_arista" class="boton-menu">
+                <span class="fi fi-rr-minus"></span>
+            </div>
+        </div>
+
+        <!-- Opciones Ejecucion -->
+        <div class="grupo-opciones" tag="Ejecución">
+            <div id="ejecutar_algoritmo" class="boton-menu">
+                <span class="fi fi-rr-play"></span>
+            </div>
+
+            <div id="pausar_algoritmo" class="boton-menu">
+                <span class="fi fi-rr-pause"></span>
+            </div>
+
+            <div id="paso_atras" class="boton-menu">
+                <span class="fi fi-rr-forward"></span>
+            </div>
+
+            <div id="paso_adelante" class="boton-menu">
+                <span class="fi fi-rr-forward"></span>
+            </div>
+
+            <div id="detener_algoritmo" class="boton-menu">
+                <span class="fi fi-rr-stop"></span>
+            </div>
+
+            <div id="ver_algoritmo" class="boton-menu">
+                <span class="fi fi-rr-eye"></span>
+            </div>
+        </div>
+
+
+        <!-- <div id="config_grafo">
             <h3 class="text-simbolo"><span>🔩</span> Configuracion <span>🔩</span></h3>
-            
+
             <div class="option">
                 <label for="grafo">Tipo de Grafo: </label>
                 <select id="grafo">
@@ -58,7 +107,7 @@
                 <a href="javascript:void(0)" id="arista" class="boton boton-disabled">Arista</a>
                 <a href="javascript:void(0)" id="restart" class="boton boton-disabled">Reiniciar Grafo</a>
             </div>
-            
+
             <div class="algoritmos">
                 <h3 class="text-simbolo"><span>🔧</span>Algoritmo<span>🔧</span></h3>
                 <a href="javascript:void(0)" id="run" class="boton simbolo boton-disabled"><span>▶️</span></a>
@@ -66,24 +115,32 @@
                 <a href="javascript:void(0)" id="pause" class="boton simbolo boton-disabled"><span>⏹</span></a>
                 <a href="javascript:void(0)" id="show_algorithm" class="boton boton-disabled">Ver Algoritmo</a>
             </div>
-        </div>
+        </div> -->
     </section>
 
+    <!-- CUERPO -->
+    <div id="content">
+        <!-- LIENZO -->
+        <svg id="canvas">
+            <defs>
+                <marker id="arrowhead" orient="auto" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="12"
+                    refX="36" refY="6">
+                    <path d="M0,0 V12 L20,6 Z" fill="black" stroke-width="3px"></path>
+                </marker>
+            </defs>
 
-    <!-- LIENZO -->
-    <svg id="canvas">
-        <defs>
-            <marker id="arrowhead" orient="auto" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="12" refX="36" refY="6">
-                <path d="M0,0 V12 L20,6 Z" fill="black" stroke-width="3px"></path>
-            </marker>
-        </defs>
+            <g id="template-textPath">
+                <text>
+                    <textPath href="#" startOffset="50%">0</textPath>
+                </text>
+            </g>
+        </svg>
 
-        <g id="template-textPath">
-            <text>
-                <textPath href="#" startOffset="50%">0</textPath>
-            </text>
-        </g>
-    </svg>
+        <!-- PANEL DERECHO -->
+        <div id="contenido_derecha">
+            <h3>Algoritmo</h3>
+        </div>
+    </div>
 
     <!-- RESULTADOS -->
     <div id="resultados">
@@ -99,8 +156,69 @@
         </table>
     </div>
 
-    <!-- MODALS -->
-    <div class="modal" id="rename_modal">
+    <!-- MODALES -->
+    <div class="modal" id="modal_configuracion_inicial">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p>Configuración</p>
+            </div>
+            <div class="modal-body">
+                <form id="configuracion_formulario">
+
+                    <div class="seccion">
+                        <div>
+                            <label for="grafo">Tipo de Grafo: </label>
+                            <select id="grafo">
+                                <option value="1">Grafo Normal</option>
+                                <option value="2">Grafo Dirigido</option>
+                            </select>
+                        </div>
+                        
+                        <div class="con-check">
+                            <label for="ponderado">Grafo Ponderado (Pesado): </label>
+                            <input type="checkbox" id="ponderado">
+                        </div>
+                        
+                        <div class="con-check">
+                            <label for="autonombrar">Nombrar Automáticamente (Con Números): </label>
+                            <input type="checkbox" id="autonombrar">
+                        </div>
+                    </div>
+
+                    <div class="seccion">
+                        <div>
+                            <label for="grafo">Tiempo Para Cada Paso del Algoritmo (ms): </label>
+                            <input type="number" id="tiempo_paso" step="1" min="0" max="5000">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" value="Finalizar" form="configuracion_formulario" class="boton">
+                <a href="javascript:void(0)" class="boton cerrar-modal" id="nombrar_cancelar">Cancelar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal_nombrar_nodo">
+        <div class="modal-content">
+            <div class="modal-header center">
+                <p>Nombra el Nodo Creado</p>
+            </div>
+            <div class="modal-body">
+                <form id="nombrar_formulario">
+                    <input type="text" id="nodoName" class="" autocomplete="off">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" value="Hecho" form="nombrar_formulario" class="boton">
+                <a href="javascript:void(0)" class="boton cerrar-modal" id="nombrar_cancelar">Cancelar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="modal" id="rename_modal">
         <div class="modal-content">
             <div class="modal-header center">
                 <p>Nombra el Nodo Creado</p>
@@ -115,7 +233,7 @@
                 <a href="javascript:void(0)" class="boton cerrar-modal" id="rename_cancel">Cancelar</a>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="modal" id="set_weight_modal">
         <div class="modal-content">
