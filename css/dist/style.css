@@ -5,31 +5,51 @@
   list-style: none;
   text-decoration: none;
   font-family: system-ui, sans-serif;
+  line-height: 1;
 }
 
-input:not([type=checkbox]):not([type=submit]),
-select {
-  border-radius: 4px;
+input:not([type=checkbox]):not([type=submit]) {
   min-height: 28px;
-  min-width: 70px;
+  min-width: 50px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
   font-size: 14px;
-  padding: 4px;
+  padding: 4px 8px 4px 8px;
 }
-
-input:focus,
-select:focus {
+input:not([type=checkbox]):not([type=submit]):focus {
   outline: none;
-  border: 1px solid #192a56;
+  border: 1px solid #888888;
 }
-
+input[type=number] {
+  width: 50px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number] ::-webkit-outer-spin-button {
+  appearance: none;
+}
 input[type=checkbox] {
   width: 18px;
   height: 18px;
 }
-
 input[type=submit] {
   border: none;
   cursor: pointer;
+}
+input[type=submit]:focus {
+  outline: none;
+}
+
+select {
+  min-height: 28px;
+  min-width: 70px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 14px;
+  padding: 4px 8px 4px 8px;
+}
+select:focus {
+  outline: none;
+  border: 1px solid #888888;
 }
 
 h1 {
@@ -42,62 +62,14 @@ h1 {
 
 #menu {
   position: relative;
+  width: 100%;
   background-color: #192a56;
   display: flex;
   flex-flow: wrap row;
   justify-content: start;
   align-items: center;
   column-gap: 20px;
-  padding-top: 10px;
-  padding-left: 6px;
-  /* #config_grafo {
-      display: flex;
-      gap: 12px 24px;
-      flex-flow: wrap row;
-      justify-content: center;
-      align-items: center;
-      padding: 12px;
-
-      h3 {
-          flex-basis: 100%;
-          font-size: 18px;
-          text-align: center;
-      }
-
-      .finalizar {
-          flex-basis: 100%;
-
-          a {
-              width: 100px;
-              margin: 0 auto;
-          }
-      }
-  }
-
-  #opciones {
-      display: grid;
-      width: 100%;
-      height: auto;
-      justify-content: space-between;
-      align-items: center;
-      grid-template-columns: 1fr 1fr;
-      column-gap: 24px;
-      padding: 12px;
-
-      .modificacion, .algoritmos {
-          display: flex;
-          flex-flow: wrap row;
-          justify-content: center;
-          align-items: center;
-          gap: 10px 20px;
-
-          h3{
-              flex-basis: 100%;
-              font-size: 18px;
-              text-align: center;
-          }
-      }
-  } */
+  padding: 10px 6px 0px 6px;
 }
 #menu #opciones_menu {
   position: absolute;
@@ -163,6 +135,15 @@ h1 {
 #menu #paso_atras span {
   transform: rotate(180deg);
 }
+#menu #algoritmo {
+  width: 120px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+#menu #manual_boton {
+  margin-left: auto;
+  margin-right: 9px;
+}
 
 .boton {
   display: flex;
@@ -181,7 +162,7 @@ h1 {
   transition: all 100ms;
 }
 
-.desabilitado {
+.deshabilitado {
   pointer-events: none;
   opacity: 0.6;
 }
@@ -226,7 +207,7 @@ h1 {
   font-size: 14px;
 }
 .full-edge .arista {
-  stroke: #bbbbbb;
+  stroke: #707070;
   stroke-width: 3px;
   fill: none;
   cursor: pointer;
@@ -327,10 +308,21 @@ h1 {
   align-items: center;
   justify-content: center;
 }
-.modal .modal-content .modal-body form .seccion .con-check {
+.modal .modal-content .modal-body form .con-check {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+.modal .modal-content .modal-body form .con-check input[type=checkbox] {
+  margin-top: 4px;
+}
+.modal .modal-content .modal-body form .dejar-preguntar {
+  margin-top: -20px;
+  font-size: 14px;
+}
+.modal .modal-content .modal-body form .dejar-preguntar input[type=checkbox] {
+  width: 16px;
+  height: 16px;
 }
 .modal .modal-content .modal-footer {
   margin-top: 20px;

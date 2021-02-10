@@ -27,41 +27,57 @@
 
         <!-- Opciones Grafo -->
         <div class="grupo-opciones" tag="Grafo">
-            <div id="dibujar_nodo" class="boton-menu">
+            <div id="dibujar_nodo" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-circle"></span>
             </div>
 
-            <div id="dibujar_arista" class="boton-menu">
+            <div id="dibujar_arista" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-minus"></span>
             </div>
         </div>
 
         <!-- Opciones Ejecucion -->
         <div class="grupo-opciones" tag="Ejecución">
-            <div id="ejecutar_algoritmo" class="boton-menu">
+
+            <div class="deshabilitado">
+                <select id="algoritmo">
+                    <option value="1">BFS</option>
+                    <option value="2">DFS</option>
+                    <option value="3">otro</option>
+                    <option value="4">otro</option>
+                </select>
+            </div>
+
+            <div id="ejecutar_algoritmo" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-play"></span>
             </div>
 
-            <div id="pausar_algoritmo" class="boton-menu">
+            <div id="paso_atras" class="boton-menu deshabilitado">
+                <span class="fi fi-rr-forward"></span>
+            </div>
+
+            <div id="pausar_ejecucion" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-pause"></span>
             </div>
 
-            <div id="paso_atras" class="boton-menu">
+            <div id="paso_adelante" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-forward"></span>
             </div>
 
-            <div id="paso_adelante" class="boton-menu">
-                <span class="fi fi-rr-forward"></span>
-            </div>
-
-            <div id="detener_algoritmo" class="boton-menu">
+            <div id="detener_ejecucion" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-stop"></span>
             </div>
 
-            <div id="ver_algoritmo" class="boton-menu">
+            <div id="ver_algoritmo" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-eye"></span>
             </div>
         </div>
+
+        <!-- Manual -->
+        <div id="manual_boton" class="boton-menu grupo-opciones">
+            <span class="fi fi-rr-book"></span>
+        </div>
+
 
 
         <!-- <div id="config_grafo">
@@ -173,21 +189,21 @@
                                 <option value="2">Grafo Dirigido</option>
                             </select>
                         </div>
-                        
+
                         <div class="con-check">
-                            <label for="ponderado">Grafo Ponderado (Pesado): </label>
+                            <label for="ponderado">Grafo Ponderado (Pesado):</label>
                             <input type="checkbox" id="ponderado">
                         </div>
-                        
+
                         <div class="con-check">
-                            <label for="autonombrar">Nombrar Automáticamente (Con Números): </label>
+                            <label for="autonombrar">Nombrar Automáticamente (Con Números):</label>
                             <input type="checkbox" id="autonombrar">
                         </div>
                     </div>
 
                     <div class="seccion">
                         <div>
-                            <label for="grafo">Tiempo Para Cada Paso del Algoritmo (ms): </label>
+                            <label for="tiempo_paso">Tiempo Para Cada Paso del Algoritmo (ms): </label>
                             <input type="number" id="tiempo_paso" step="1" min="0" max="5000">
                         </div>
                     </div>
@@ -196,7 +212,7 @@
             </div>
             <div class="modal-footer">
                 <input type="submit" value="Finalizar" form="configuracion_formulario" class="boton">
-                <a href="javascript:void(0)" class="boton cerrar-modal" id="nombrar_cancelar">Cancelar</a>
+                <a href="javascript:void(0)" class="boton cerrar-modal" id="configuracion_cancelar">Cancelar</a>
             </div>
         </div>
     </div>
@@ -208,7 +224,7 @@
             </div>
             <div class="modal-body">
                 <form id="nombrar_formulario">
-                    <input type="text" id="nodoName" class="" autocomplete="off">
+                    <input type="text" id="nombre_nodo" class="" autocomplete="off">
                 </form>
             </div>
             <div class="modal-footer">
@@ -218,22 +234,25 @@
         </div>
     </div>
 
-    <!-- <div class="modal" id="rename_modal">
+    <div class="modal" id="modal_informacion_ejecutar">
         <div class="modal-content">
             <div class="modal-header center">
-                <p>Nombra el Nodo Creado</p>
+                <p>Ejecutar</p>
             </div>
             <div class="modal-body">
-                <form id="rename_form">
-                    <input type="text" id="nodoName" class="" autocomplete="off">
+                <form id="informar_antes_ejecutar">
+                    <h4>A continuación, selecciona el nodo de inicio.</h4>
+                    <div class="con-check dejar-preguntar">
+                        <label for="informar_ejecutar">No volver a mostrar</label>
+                        <input type="checkbox" id="informar_ejecutar">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <input type="submit" value="Hecho" form="rename_form" class="boton">
-                <a href="javascript:void(0)" class="boton cerrar-modal" id="rename_cancel">Cancelar</a>
+                <input type="submit" value="Ok" form="informar_antes_ejecutar" class="boton">
             </div>
         </div>
-    </div> -->
+    </div>
 
     <div class="modal" id="set_weight_modal">
         <div class="modal-content">

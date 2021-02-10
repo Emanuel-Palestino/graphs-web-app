@@ -10,33 +10,63 @@ $azulClaro: #0097e6;
     list-style: none;
     text-decoration: none;
     font-family: system-ui, sans-serif;
+    line-height: 1;
 }
 
 // INPUTS
-input:not([type="checkbox"]):not([type="submit"]),
+input {
+    &:not([type="checkbox"]):not([type="submit"]) {
+        min-height: 28px;
+        min-width: 50px;
+        border: 1px solid #cccccc;
+        border-radius: 6px;
+        font-size: 14px;
+        padding: 4px 8px 4px 8px;
+
+        &:focus {
+            outline: none;
+            border: 1px solid #888888;
+        }
+    }
+
+    &[type="number"] {
+        width: 50px;
+
+        &::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            appearance: none;
+        }
+    }
+
+    &[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+    }
+
+    &[type="submit"] {
+        border: none;
+        cursor: pointer;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
 select {
-    border-radius: 4px;
     min-height: 28px;
     min-width: 70px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
     font-size: 14px;
-    padding: 4px;
+    padding: 4px 8px 4px 8px;
+
+    &:focus {
+        outline: none;
+        border: 1px solid #888888;
+    }
 }
 
-input:focus,
-select:focus {
-    outline: none;
-    border: 1px solid $azulFuerte;
-}
-
-input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-}
-
-input[type="submit"] {
-    border: none;
-    cursor: pointer;
-}
 
 // TITULO
 h1 {
@@ -47,17 +77,18 @@ h1 {
     color: white;
 }
 
-// CONFIGURACION
+
+// MENU
 #menu {
     position: relative;
+    width: 100%;
     background-color: $azulFuerte;
     display: flex;
     flex-flow: wrap row;
     justify-content: start;
     align-items: center;
     column-gap: 20px;
-    padding-top: 10px;
-    padding-left: 6px;
+    padding: 10px 6px 0px 6px;
 
     #opciones_menu {
         position: absolute;
@@ -139,55 +170,18 @@ h1 {
         }
     }
 
-    /* #config_grafo {
-        display: flex;
-        gap: 12px 24px;
-        flex-flow: wrap row;
-        justify-content: center;
-        align-items: center;
-        padding: 12px;
-
-        h3 {
-            flex-basis: 100%;
-            font-size: 18px;
-            text-align: center;
-        }
-
-        .finalizar {
-            flex-basis: 100%;
-
-            a {
-                width: 100px;
-                margin: 0 auto;
-            }
-        }
+    #algoritmo {
+        width: 120px;
+        margin-left: 6px;
+        margin-right: 6px;
     }
-    
-    #opciones {
-        display: grid;
-        width: 100%;
-        height: auto;
-        justify-content: space-between;
-        align-items: center;
-        grid-template-columns: 1fr 1fr;
-        column-gap: 24px;
-        padding: 12px;
 
-        .modificacion, .algoritmos {
-            display: flex;
-            flex-flow: wrap row;
-            justify-content: center;
-            align-items: center;
-            gap: 10px 20px;
-            
-            h3{
-                flex-basis: 100%;
-                font-size: 18px;
-                text-align: center;
-            }
-        }
-    } */
+    #manual_boton {
+        margin-left: auto;
+        margin-right: 9px;
+    }
 }
+
 
 // BOTONES
 .boton {
@@ -208,7 +202,7 @@ h1 {
     }
 }
 
-.desabilitado {
+.deshabilitado {
     pointer-events: none;
     opacity: 0.6;
 }
@@ -257,6 +251,7 @@ h1 {
     }
 }
 
+
 // ARISTAS
 .full-edge {
     text-anchor: middle;
@@ -265,7 +260,7 @@ h1 {
     font-size: 14px;
 
     .arista {
-        stroke: #bbbbbb;
+        stroke: #707070;
         stroke-width: 3px;
         fill: none;
         cursor: pointer;
@@ -276,6 +271,7 @@ h1 {
         stroke-width: 5px;
     }
 }
+
 
 // RESULTADOS
 #resultados {
@@ -310,6 +306,7 @@ h1 {
         }
     }
 }
+
 
 // MODAL
 .modal {
@@ -376,11 +373,25 @@ h1 {
                     row-gap: 20px;
                     align-items: center;
                     justify-content: center;
+                }
+                
+                .con-check {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
 
-                    .con-check {
-                        display: flex;
-                        align-items: center;
-                        gap: 6px;
+                    input[type="checkbox"] {
+                        margin-top: 4px;
+                    }
+                }
+
+                .dejar-preguntar {
+                    margin-top: -20px;
+                    font-size: 14px;
+
+                    input[type="checkbox"] {
+                        width: 16px;
+                        height: 16px;
                     }
                 }
             }
@@ -397,6 +408,7 @@ h1 {
         }
     }
 }
+
 
 // OTROS
 .no-scroll {

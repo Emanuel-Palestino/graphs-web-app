@@ -1,5 +1,10 @@
 $('.modal').hide();
-const btnRun = $("#ejecutar_algoritmo1");
+
+const btnRun = $("#ejecutar_algoritmo");
+let tipoGrafo = 1;
+let ponderado = false;
+let autonombrar = false;
+let tiempoPaso = 500;
 
 // MODAL
 function showModal(modal, title = null, showed = null, closing = null) {
@@ -47,7 +52,7 @@ $('.boton-menu').click(function () {
 
 // DESPLEGAR MENU DE OPCIONES
 $('#opciones').click(function () {
-    $('#opciones_menu').slideToggle(200, function() {
+    $('#opciones_menu').slideToggle(200, function () {
         if ($('#opciones_menu').attr('style') == 'display: none;')
             $('#opciones').removeClass('activo');
     });
@@ -56,35 +61,71 @@ $('#opciones').click(function () {
 $('body').on("click", function (element) {
     let opciones = $('#opciones');
     if (element.target != opciones[0]) {
-        $('#opciones_menu').slideUp(200, function() {
+        $('#opciones_menu').slideUp(200, function () {
             opciones.removeClass('activo');
         });
     }
 });
 
 // CONFIGURACION INICIAL
-$('#nuevo_grafo').click(function() {
+$('#nuevo_grafo').click(function () {
     showModal($('#modal_configuracion_inicial'), null, () => {
         // Limpiar los inputs
+        $("#grafo").val(1);
+        $("#ponderado, #autonombrar").prop("checked", false);
+        $("#tiempo_paso").val("");
     });
+});
+
+// FINALIZAR CONFIGURACION
+$("#configuracion_formulario").submit(function (e) {
+    e.preventDefault();
+
+    // Detectar que tipo de grafo se va a dibujar
+    tipoGrafo = parseInt($("#grafo").val());
+
+    // Saber si es ponderado o no
+    ponderado = $("#ponderado:checked").val() != undefined ? true : false;
+
+    // Saber si se nombrará automaticamente
+    autonombrar = $("#autonombrar:checked").val() != undefined ? true : false;
+
+    // Obtener el tiempo de cada paso para la ejecucion
+    tiempoPaso = $("#tiempo_paso").val() != "" ? parseInt($("#tiempo_paso").val()) : 500;
+
+    // Habilitar botones del menu
+    $(".grupo-opciones .deshabilitado:not(#paso_atras, #paso_adelante, #pausar_ejecucion, #detener_ejecucion)").removeClass("deshabilitado");
+
+    // Cerrar modal
+    $("#configuracion_cancelar").trigger("click");
 });
 
 // EJECUTAR EL ALGORITMO SELECCIONADO
 btnRun.click(function () {
-    // Seleccionar nodo de inicio
-    // evitar que se inicie el proceso de creacion de aristas
-    $(".boton-selected").removeClass("boton-selected");
-    btnRun.addClass("boton-selected");
-    elemento = 3;
-    $(".nodo").addClass("nodoarista");
+    // Avisar que tiene que seleccionar el nodo de incio
+    showModal($("#modal_informacion_ejecutar"), null, null, () => {
 
-    let idStartNodo = "";
-    canvas.find(".nodo").on("click", function (node) {
-        idStartNodo = $(node.target).attr("id");
-        if (algoritmo == 1)
-            BFS(idStartNodo);
-        else if (algoritmo == 2)
-            DFS(idStartNodo);
-        canvas.find(".nodo").off("click");
+        // Seleccionar nodo de inicio
+        // evitar que se inicie el proceso de creacion de aristas
+        elemento = 3;
+        $(".nodo").addClass("nodoarista");
+
+        let idStartNodo = "";
+        canvas.find(".nodo").on("click", function (node) {
+            idStartNodo = $(node.target).attr("id");
+            if (algoritmo == 1)
+                BFS(idStartNodo);
+            else if (algoritmo == 2)
+                DFS(idStartNodo);
+            canvas.find(".nodo").off("click");
+        });
+
     });
+});
+
+// NO VOLVER A MOSTRAR MENSAJE ANTES DE EJECUTAR
+$('#informar_antes_ejecutar').click(function() {
+    if ($("#informar_ejecutar:checked").val() != undefined) {
+        // crear la cookie para ya no volver a preguntar
+    }
 });

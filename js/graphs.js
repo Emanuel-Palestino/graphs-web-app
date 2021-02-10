@@ -1,11 +1,8 @@
-const btnNodo = $("#nodo");
-const btnArista = $("#arista");
+const btnNodo = $("#dibujar_nodo");
+const btnArista = $("#dibujar_arista");
 const canvas = $("#canvas");
 const btnRestart = $("#restart");
-let tipoGrafo = 1;
 let algoritmo = 1;
-let ponderado = false;
-let autonombrar = false;
 let contadorNodos = 1;
 
 var elemento = 0;
@@ -25,8 +22,6 @@ let margenCanvas = canvas.offset();
 btnNodo.click(function () {
     elemento = 1;
     aristaFlag = 0;
-    $(".boton-selected").removeClass("boton-selected");
-    btnNodo.addClass("boton-selected");
     // clase para cambiar la vista del cursor
     $(".nodo").removeClass(["nodoarista"]);
 });
@@ -39,36 +34,9 @@ btnArista.click(function () {
     $(".nodo").addClass("nodoarista");
 });
 
-// Detectar que tipo de grafo se va a dibujar
-$("#grafo").change(function () {
-    tipoGrafo = parseInt($(this).val());
-});
-
-// Saber si es ponderado o no
-$("#ponderado").change(function () {
-    if ($("#ponderado:checked").val() != undefined)
-        ponderado = true;
-    else
-        ponderado = false;
-});
-
 // Detectar el tipo de algoritmo escogido
 $("#algoritmo").change(function () {
     algoritmo = parseInt($(this).val());
-});
-
-// Saber si se nombrará automaticamente
-$("#autonombrar").change(function () {
-    if ($("#autonombrar:checked").val() != undefined)
-        autonombrar = true;
-    else
-        autonombrar = false;
-});
-
-// Finalizar configuracion
-$("#config_final").click(function () {
-    $("#config_grafo").children().addClass("boton-disabled");
-    $(".modificacion, .algoritmos").children().removeClass("boton-disabled");
 });
 
 // Crear un nodo dentro del lienzo
@@ -79,15 +47,15 @@ canvas.click(function (event) {
 
         if (!autonombrar) {
             // Nombrar al nodo
-            let inputName = $("#nodoName");
-            showModal($("#rename_modal"), null, () => {
+            let inputName = $("#nombre_nodo");
+            showModal($("#modal_nombrar_nodo"), null, () => {
                 inputName.focus();
             }, () => {
                 inputName.val("");
-                $("#rename_form").off("submit");
+                $("#modal_nombrar_nodo").off("submit");
             });
 
-            $("#rename_form").on('submit', function (e) {
+            $("#nombrar_formulario").on('submit', function (e) {
                 e.preventDefault();
                 let name = inputName.val();
                 if (name != '') {
@@ -123,8 +91,8 @@ canvas.click(function (event) {
                     nodos.push(nodo);
 
                     // cerrar modal
-                    $("#rename_cancel").trigger("click");
-                    $("#rename_form").off("submit");
+                    $("#nombrar_cancelar").trigger("click");
+                    $("#nombrar_formulario").off("submit");
                 }
             });
         } else {
