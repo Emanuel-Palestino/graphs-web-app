@@ -1,6 +1,7 @@
 $('.modal').hide();
 
-const btnRun = $("#ejecutar_algoritmo");
+const btnEjecutar = $("#ejecutar_algoritmo");
+const btnLimpiarGrafo = $("#limpiar_grafo");
 let tipoGrafo = 1;
 let ponderado = false;
 let autonombrar = false;
@@ -57,6 +58,7 @@ $('#opciones').click(function () {
             $('#opciones').removeClass('activo');
     });
 });
+
 // OCULTAR MENU DE OPCIONES
 $('body').on("click", function (element) {
     let opciones = $('#opciones');
@@ -65,6 +67,25 @@ $('body').on("click", function (element) {
             opciones.removeClass('activo');
         });
     }
+});
+
+// CHECAR SI EL LIENZO ESTÁ VACIO
+function lienzoVacio() {
+    if (!$("#canvas").find(".nodo").length)
+        return true;
+    else
+        return false;
+}
+
+// LIMPIAR TABLA DE RESULTADOS
+function limpiarTabla() {
+    $("#resultados table").empty();
+}
+
+// LIMPIAR EL GRAFO
+btnLimpiarGrafo.click(function () {
+    $(".full-nodo, .full-edge").remove();
+    limpiarTabla();
 });
 
 // CONFIGURACION INICIAL
@@ -96,36 +117,41 @@ $("#configuracion_formulario").submit(function (e) {
     // Habilitar botones del menu
     $(".grupo-opciones .deshabilitado:not(#paso_atras, #paso_adelante, #pausar_ejecucion, #detener_ejecucion)").removeClass("deshabilitado");
 
+    // Limpiar grafo
+    btnLimpiarGrafo.trigger("click");
     // Cerrar modal
     $("#configuracion_cancelar").trigger("click");
 });
 
 // EJECUTAR EL ALGORITMO SELECCIONADO
-btnRun.click(function () {
-    // Avisar que tiene que seleccionar el nodo de incio
-    showModal($("#modal_informacion_ejecutar"), null, null, () => {
-
-        // Seleccionar nodo de inicio
-        // evitar que se inicie el proceso de creacion de aristas
-        elemento = 3;
-        $(".nodo").addClass("nodoarista");
-
-        let idStartNodo = "";
-        canvas.find(".nodo").on("click", function (node) {
-            idStartNodo = $(node.target).attr("id");
-            if (algoritmo == 1)
-                BFS(idStartNodo);
-            else if (algoritmo == 2)
-                DFS(idStartNodo);
-            canvas.find(".nodo").off("click");
-        });
-
+btnEjecutar.click(function () {
+    $("#algoritmo").parent().addClass("deshabilitado");
+    // Mostrar o no la informacion antes de ejecutar
+    if (localStorage.getItem("informar_antes_ejecutar") != "false") {
+        // Avisar que tiene que seleccionar el nodo de incio
+        showModal($("#modal_informacion_ejecutar"));
+    }
+    // Seleccionar nodo de inicio
+    // evitar que se inicie el proceso de creacion de aristas
+    elemento = 3;
+    $(".nodo").addClass("nodoarista");
+    
+    let idStartNodo = "";
+    canvas.find(".nodo").on("click", function (node) {
+        $(".activo").removeClass("activo");
+        idStartNodo = $(node.target).attr("id");
+        //canvas.find(".nodo").off("click");
+        $(this).off("click");
+        if (algoritmo == 1)
+            BFS(idStartNodo);
+        else if (algoritmo == 2)
+            DFS(idStartNodo);
     });
 });
 
 // NO VOLVER A MOSTRAR MENSAJE ANTES DE EJECUTAR
-$('#informar_antes_ejecutar').click(function() {
-    if ($("#informar_ejecutar:checked").val() != undefined) {
-        // crear la cookie para ya no volver a preguntar
-    }
+$('#informar_antes_ejecutar').submit(function (e) {
+    e.preventDefault();
+    if ($("#informar_ejecutar:checked").val() != undefined)
+        localStorage.setItem('informar_antes_ejecutar', "false");
 });

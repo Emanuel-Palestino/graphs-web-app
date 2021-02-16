@@ -1,9 +1,11 @@
 function BFS(start) {
-    // La inicializacion de los atributos ya ha sido realizada
-    // Se procede a hacer el recorrido
-    let indexNode = nodos.findIndex(nodo => nodo.id == start);
     // Pintar el nodo inicial
     $("#" + start).addClass("start");
+    let indexNode = nodos.findIndex(nodo => nodo.id == start);
+
+    // La inicializacion de los atributos ya ha sido realizada
+
+    // Se procede a hacer el recorrido
 
     // Iniciamos el nodo de inicio
     nodos[indexNode].estado = "visitado";
@@ -32,15 +34,16 @@ function BFS(start) {
                 let edge = $(`.arista[fromNode="${u.id}"][toNode="${idNode}"]`)[0] || $(`.arista[fromNode="${idNode}"][toNode="${u.id}"]`)[0];
                 $(edge).addClass("path");
 
+                //console.log("terminado");
+
                 Q.push(nodos[index]);
             }
         }
         u.estado = "finalizado";
     }
 
-    btnRun.removeClass("boton-selected");
-
     // Mostrar la tabla de resultados
+    $('#resultados table').append('<tr></tr>').append('<tr></tr>').append('<tr></tr>');
     let filaNodos = $("#resultados table tr:nth-child(1)");
     let filaDistancia = $("#resultados table tr:nth-child(2)");
     let filaPredecesor = $("#resultados table tr:nth-child(3)");

@@ -76,6 +76,7 @@ h1 {
   display: none;
   top: 54px;
   left: 6px;
+  z-index: 100;
   width: 180px;
   border-radius: 0px 0px 6px 6px;
   background-color: #192a56;
@@ -167,11 +168,26 @@ h1 {
   opacity: 0.6;
 }
 
-#canvas {
-  width: 100%;
+#content {
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+}
+#content #canvas {
+  flex-basis: 100%;
   height: 82vh;
   background-color: #e2e2e2;
   border-bottom: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+}
+#content #panel_izquierdo {
+  position: absolute;
+  top: 0;
+  left: -400px;
+  width: 400px;
+  height: 82vh;
+  background-color: white;
 }
 
 .full-nodo text {
@@ -344,4 +360,8 @@ h1 {
 
 .center {
   text-align: center;
+}
+
+#peso_arista {
+  width: 100px;
 }

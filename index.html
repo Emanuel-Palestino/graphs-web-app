@@ -22,7 +22,7 @@
         </div>
         <div id="opciones_menu">
             <a href="javascript:void(0)" id="nuevo_grafo">Nuevo Grafo</a>
-            <a href="javascript:void(0)" id="reiniciar_grafo">Reinciar Grafo</a>
+            <a href="javascript:void(0)" id="limpiar_grafo">Limpiar Grafo</a>
         </div>
 
         <!-- Opciones Grafo -->
@@ -52,17 +52,17 @@
                 <span class="fi fi-rr-play"></span>
             </div>
 
-            <div id="paso_atras" class="boton-menu deshabilitado">
+            <!-- <div id="paso_atras" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-forward"></span>
-            </div>
+            </div> -->
 
             <div id="pausar_ejecucion" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-pause"></span>
             </div>
 
-            <div id="paso_adelante" class="boton-menu deshabilitado">
+            <!-- <div id="paso_adelante" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-forward"></span>
-            </div>
+            </div> -->
 
             <div id="detener_ejecucion" class="boton-menu deshabilitado">
                 <span class="fi fi-rr-stop"></span>
@@ -77,65 +77,16 @@
         <div id="manual_boton" class="boton-menu grupo-opciones">
             <span class="fi fi-rr-book"></span>
         </div>
-
-
-
-        <!-- <div id="config_grafo">
-            <h3 class="text-simbolo"><span>🔩</span> Configuracion <span>🔩</span></h3>
-
-            <div class="option">
-                <label for="grafo">Tipo de Grafo: </label>
-                <select id="grafo">
-                    <option value="1">Grafo Normal</option>
-                    <option value="2">Grafo Dirigido</option>
-                </select>
-            </div>
-
-            <div class="option w-check">
-                <label for="ponderado">Ponderado(Pesado): </label>
-                <input type="checkbox" id="ponderado">
-            </div>
-
-            <div class="option">
-                <label for="algoritmo">Algoritmo a Ejecutar: </label>
-                <select id="algoritmo">
-                    <option value="1">BFS</option>
-                    <option value="2">DFS</option>
-                    <option value="3">otro</option>
-                    <option value="4">otro</option>
-                </select>
-            </div>
-
-            <div class="option w-check">
-                <label for="autonombrar">Nombre Automático(Numeros): </label>
-                <input type="checkbox" id="autonombrar">
-            </div>
-
-            <div class="finalizar">
-                <a href="javascript:void(0)" id="config_final" class="boton">Finalizar</a>
-            </div>
-        </div>
-
-        <div id="opciones">
-            <div class="modificacion">
-                <h3>✍ Grafo ✍</h3>
-                <a href="javascript:void(0)" id="nodo" class="boton boton-disabled">Nodo</a>
-                <a href="javascript:void(0)" id="arista" class="boton boton-disabled">Arista</a>
-                <a href="javascript:void(0)" id="restart" class="boton boton-disabled">Reiniciar Grafo</a>
-            </div>
-
-            <div class="algoritmos">
-                <h3 class="text-simbolo"><span>🔧</span>Algoritmo<span>🔧</span></h3>
-                <a href="javascript:void(0)" id="run" class="boton simbolo boton-disabled"><span>▶️</span></a>
-                <a href="javascript:void(0)" id="pause" class="boton simbolo boton-disabled"><span>⏸</span></a>
-                <a href="javascript:void(0)" id="pause" class="boton simbolo boton-disabled"><span>⏹</span></a>
-                <a href="javascript:void(0)" id="show_algorithm" class="boton boton-disabled">Ver Algoritmo</a>
-            </div>
-        </div> -->
     </section>
 
     <!-- CUERPO -->
     <div id="content">
+        
+        <!-- PANEL IZQUIERDO -->
+        <div id="panel_izquierdo">
+            <h3>Algoritmo</h3>
+        </div>
+
         <!-- LIENZO -->
         <svg id="canvas">
             <defs>
@@ -151,11 +102,6 @@
                 </text>
             </g>
         </svg>
-
-        <!-- PANEL DERECHO -->
-        <div id="contenido_derecha">
-            <h3>Algoritmo</h3>
-        </div>
     </div>
 
     <!-- RESULTADOS -->
@@ -163,12 +109,6 @@
         <h2>Resultados</h2>
 
         <table class="table">
-            <tr>
-            </tr>
-            <tr>
-            </tr>
-            <tr>
-            </tr>
         </table>
     </div>
 
@@ -249,24 +189,24 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <input type="submit" value="Ok" form="informar_antes_ejecutar" class="boton">
+                <input type="submit" value="Ok" form="informar_antes_ejecutar" id="informar_ejecutar_terminar" class="boton cerrar-modal">
             </div>
         </div>
     </div>
 
-    <div class="modal" id="set_weight_modal">
+    <div class="modal" id="modal_peso_arista">
         <div class="modal-content">
             <div class="modal-header center">
-                <p>Ingresa el Peso de la arista</p>
+                <p>Ingresa el Peso de la Arista</p>
             </div>
-            <div class="modal-body card-1">
-                <form id="set_weight_form">
-                    <input type="number" id="weight" autocomplete="off" step="0.01">
+            <div class="modal-body">
+                <form id="peso_arista_formulario">
+                    <input type="number" id="peso_arista" autocomplete="off" step="0.01">
                 </form>
             </div>
             <div class="modal-footer">
-                <input type="submit" value="Hecho" form="set_weight_form" class="boton">
-                <a href="javascript:void(0)" class="boton cerrar-modal" id="set_weight_cancel">Cancelar</a>
+                <input type="submit" value="Hecho" form="peso_arista_formulario" class="boton">
+                <a href="javascript:void(0)" class="boton cerrar-modal" id="peso_arista_cancelar">Cancelar</a>
             </div>
         </div>
     </div>

@@ -1,7 +1,6 @@
 const btnNodo = $("#dibujar_nodo");
 const btnArista = $("#dibujar_arista");
 const canvas = $("#canvas");
-const btnRestart = $("#restart");
 let algoritmo = 1;
 let contadorNodos = 1;
 
@@ -275,12 +274,12 @@ canvas.on("mousedown", ".nodo", function () {
 
                 // Preguntar por el peso de la arista
                 if (ponderado) {
-                    let inputWeight = $("#weight");
-                    showModal($("#set_weight_modal"), null, () => {
+                    let inputWeight = $("#peso_arista");
+                    showModal($("#modal_peso_arista"), null, () => {
                         inputWeight.focus();
                     }, () => {
                         inputWeight.val("");
-                        $("#set_weight_form").off("submit");
+                        $("#peso_arista_formulario").off("submit");
                     });
 
                     let thisx0 = parseFloat(x0),
@@ -288,7 +287,7 @@ canvas.on("mousedown", ".nodo", function () {
                         thisy0 = parseFloat(y0),
                         thisy1 = parseFloat(y1);
 
-                    $("#set_weight_form").on("submit", function (e) {
+                    $("#peso_arista_formulario").on("submit", function (e) {
                         e.preventDefault();
                         let weight = parseInt(inputWeight.val());
                         if (!isNaN(weight)) {
@@ -341,8 +340,8 @@ canvas.on("mousedown", ".nodo", function () {
                             nodos[indexNodo2].aristas.push(arista);
 
                             // cerrar modal
-                            $("#set_weight_cancel").trigger("click");
-                            $("#set_weight_form").off("submit");
+                            $("#peso_arista_cancelar").trigger("click");
+                            $("#peso_arista_formulario").off("submit");
                         }
                     });
                 } else {
@@ -385,11 +384,4 @@ canvas.on("mousedown", ".nodo", function () {
             x0 = y0 = x1 = y1 = 0;
         }
     }
-});
-
-// Reiniciar Dibujo de Grafo
-btnRestart.click(function () {
-    $(".boton-selected").removeClass("boton-selected");
-    btnRestart.addClass("boton-selected");
-    window.location.reload();
 });

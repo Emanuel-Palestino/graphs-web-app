@@ -19,7 +19,7 @@ function DFS(start) {
     });
 
     // Mostrar la tabla de resultados
-    $('#resultados table').append('<tr></tr>');
+    $('#resultados table').append('<tr></tr>').append('<tr></tr>').append('<tr></tr>').append('<tr></tr>');
     let filaNodos = $("#resultados table tr:nth-child(1)");
     let filaDistancia = $("#resultados table tr:nth-child(2)");
     let filaFinalizado = $("#resultados table tr:nth-child(3)");
