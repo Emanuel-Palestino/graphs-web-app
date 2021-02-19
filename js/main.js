@@ -2,10 +2,16 @@ $('.modal').hide();
 
 const btnEjecutar = $("#ejecutar_algoritmo");
 const btnLimpiarGrafo = $("#limpiar_grafo");
+
 let tipoGrafo = 1;
 let ponderado = false;
 let autonombrar = false;
 let tiempoPaso = 500;
+
+let algoritmo = 1;
+let contadorAristas = -1;
+let contadorNodos = 1;
+let pausa = false;
 
 // MODAL
 function showModal(modal, title = null, showed = null, closing = null) {
@@ -85,6 +91,16 @@ function limpiarTabla() {
 // LIMPIAR EL GRAFO
 btnLimpiarGrafo.click(function () {
     $(".full-nodo, .full-edge").remove();
+    pausa = false;
+    contadorAristas = -1;
+    contadorNodos = 1;
+    elemento = aristaFlag = 0;
+    x0 = y0 = x1 = y1 = 0;
+    idNodo1 = idNodo2 = 0;
+
+    nodos = [];
+    aristas = [];
+    listaAdyacencias = {};
     limpiarTabla();
 });
 
@@ -115,7 +131,7 @@ $("#configuracion_formulario").submit(function (e) {
     tiempoPaso = $("#tiempo_paso").val() != "" ? parseInt($("#tiempo_paso").val()) : 500;
 
     // Habilitar botones del menu
-    $(".grupo-opciones .deshabilitado:not(#paso_atras, #paso_adelante, #pausar_ejecucion, #detener_ejecucion)").removeClass("deshabilitado");
+    $(".grupo-opciones .deshabilitado:not(#pausar_ejecucion, #detener_ejecucion, #limpiar_ejecucion)").removeClass("deshabilitado");
 
     // Limpiar grafo
     btnLimpiarGrafo.trigger("click");
@@ -123,30 +139,49 @@ $("#configuracion_formulario").submit(function (e) {
     $("#configuracion_cancelar").trigger("click");
 });
 
+// TIPO DE ALGORITMO A EJECUTAR
+$("#algoritmo").change(function () {
+    algoritmo = parseInt($(this).val());
+});
+
 // EJECUTAR EL ALGORITMO SELECCIONADO
 btnEjecutar.click(function () {
-    $("#algoritmo").parent().addClass("deshabilitado");
-    // Mostrar o no la informacion antes de ejecutar
-    if (localStorage.getItem("informar_antes_ejecutar") != "false") {
-        // Avisar que tiene que seleccionar el nodo de incio
-        showModal($("#modal_informacion_ejecutar"));
+    $("#ejecutar_algoritmo").addClass("deshabilitado");
+    if (pausa) {
+        pausa = false;
+        $(this).addClass("deshabilitado").removeClass("activo");
+    } else {
+        $("#limpiar_ejecucion").trigger("click");
+
+        $("#algoritmo").parent().addClass("deshabilitado");
+        $("#dibujar_nodo, #dibujar_arista").addClass("deshabilitado");
+        // Mostrar o no la informacion antes de ejecutar
+        if (localStorage.getItem("informar_antes_ejecutar") != "false") {
+            // Avisar que tiene que seleccionar el nodo de incio
+            showModal($("#modal_informacion_ejecutar"));
+        }
+        // Seleccionar nodo de inicio
+        // evitar que se inicie el proceso de creacion de aristas
+        elemento = 3;
+        $(".nodo").addClass("nodoarista");
+        
+        $(".nodo").on("click", function (node) {
+            // desmarcar boton de ejecucion
+            $(".activo").removeClass("activo").addClass("deshabilitado");
+            // habilitar boton de pausa y detener
+            $("#pausar_ejecucion, #detener_ejecucion").removeClass("deshabilitado");
+            let = idStartNodo = $(node.target).attr("id");
+            $(".nodo").off("click");
+            switch(algoritmo) {
+                case 1:
+                    BFS(idStartNodo);
+                    break;
+                case 2:
+                    DFS(idStartNodo);
+                    break;
+            }
+        });
     }
-    // Seleccionar nodo de inicio
-    // evitar que se inicie el proceso de creacion de aristas
-    elemento = 3;
-    $(".nodo").addClass("nodoarista");
-    
-    let idStartNodo = "";
-    canvas.find(".nodo").on("click", function (node) {
-        $(".activo").removeClass("activo");
-        idStartNodo = $(node.target).attr("id");
-        //canvas.find(".nodo").off("click");
-        $(this).off("click");
-        if (algoritmo == 1)
-            BFS(idStartNodo);
-        else if (algoritmo == 2)
-            DFS(idStartNodo);
-    });
 });
 
 // NO VOLVER A MOSTRAR MENSAJE ANTES DE EJECUTAR
@@ -154,4 +189,63 @@ $('#informar_antes_ejecutar').submit(function (e) {
     e.preventDefault();
     if ($("#informar_ejecutar:checked").val() != undefined)
         localStorage.setItem('informar_antes_ejecutar', "false");
+});
+
+// PROMESA PARA LA EJECUCION DE UN PASO DEL ALGORITMO
+function paso(codigo) {
+    return new Promise(resolve => {
+        setTimeout(async () => {
+            if(pausa) {
+                for(let i = 0; i <= 1e7; i++){
+                    await cadaSegundo();
+                    if(!pausa)
+                        break;
+                }
+            }
+            codigo();
+            return resolve(true);
+        }, tiempoPaso);
+    });
+};
+
+function cadaSegundo() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            return resolve(true);
+        }, 1000);
+    });
+}
+
+// PAUSAR EJECUCION DEL ALGORITMO
+$('#pausar_ejecucion').click(function() {
+    pausa = true;
+    $("#ejecutar_algoritmo").removeClass("deshabilitado");
+});
+
+// EJECUCION DE ALGORITMO TERMINADO
+function ejecucionFinalizada() {
+    $("#algoritmo").parent().removeClass("deshabilitado");
+    $("#ejecutar_algoritmo, #dibujar_nodo, #dibujar_arista, #limpiar_ejecucion").removeClass("deshabilitado");
+    $("#pausar_ejecucion, #detener_ejecucion").addClass("deshabilitado");
+}
+
+$("#detener_ejecucion").click(function() {
+    $("#limpiar_ejecucion").trigger("click");
+});
+
+// LIMPIAR RASTRO DE EJECUCION
+$("#limpiar_ejecucion").click(function() {
+    $(this).removeClass("activo").addClass("deshabilitado");
+
+    $(".nodo").removeClass(["nodoarista", "start", "visited"]);
+    $(".arista").removeClass("path");
+
+    // Limpiar resultados
+    limpiarTabla();
+    nodos.forEach(nodo => {
+        nodo.distancia = Infinity;
+        nodo.estado = "no visitado";
+        nodo.finalizado = 0;
+        nodo.predecesor = null;
+    });
 });

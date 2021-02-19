@@ -1,19 +1,16 @@
 const btnNodo = $("#dibujar_nodo");
 const btnArista = $("#dibujar_arista");
 const canvas = $("#canvas");
-let algoritmo = 1;
-let contadorNodos = 1;
 
-var elemento = 0;
-var contadorAristas = -1;
-var aristaFlag = 0;
+let elemento = 0;
+let aristaFlag = 0;
 
-var x0 = y0 = x1 = y1 = 0;
-var idNodo1 = idNodo2 = 0;
+let x0 = y0 = x1 = y1 = 0;
+let idNodo1 = idNodo2 = 0;
 
-var nodos = [];
-var aristas = [];
-var listaAdyacencias = {};
+let nodos = [];
+let aristas = [];
+let listaAdyacencias = {};
 
 let margenCanvas = canvas.offset();
 
@@ -31,11 +28,6 @@ btnArista.click(function () {
     btnArista.addClass("boton-selected");
     // clase para cambiar la vista del cursor
     $(".nodo").addClass("nodoarista");
-});
-
-// Detectar el tipo de algoritmo escogido
-$("#algoritmo").change(function () {
-    algoritmo = parseInt($(this).val());
 });
 
 // Crear un nodo dentro del lienzo
