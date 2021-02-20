@@ -12,6 +12,7 @@ let algoritmo = 1;
 let contadorAristas = -1;
 let contadorNodos = 1;
 let pausa = false;
+let detener = false;
 
 // MODAL
 function showModal(modal, title = null, showed = null, closing = null) {
@@ -192,26 +193,31 @@ $('#informar_antes_ejecutar').submit(function (e) {
 });
 
 // PROMESA PARA LA EJECUCION DE UN PASO DEL ALGORITMO
-function paso(codigo) {
-    return new Promise(resolve => {
-        setTimeout(async () => {
-            if(pausa) {
-                for(let i = 0; i <= 1e7; i++){
-                    await cadaSegundo();
-                    if(!pausa)
-                        break;
-                }
-            }
-            codigo();
-            return resolve(true);
+async function paso(codigo) {
+    let step = new Promise(resolve => {
+        setTimeout(() => {
+            resolve(true);
         }, tiempoPaso);
     });
+
+    await step;
+
+    if(pausa) {
+        for(let i = 0; i <= 1e7; i++){
+            await cadaSegundo();
+            if(!pausa || detener)
+                break;
+        }
+    }
+    if(detener)
+        throw new Error('Detener');
+    codigo();
 };
 
 function cadaSegundo() {
     return new Promise(resolve => {
         setTimeout(() => {
-            return resolve(true);
+            resolve(true);
         }, 1000);
     });
 }
@@ -230,7 +236,11 @@ function ejecucionFinalizada() {
 }
 
 $("#detener_ejecucion").click(function() {
+    detener = true;
     $("#limpiar_ejecucion").trigger("click");
+    $("#detener_ejecucion, #pausar_ejecucion").addClass("deshabilitado");
+    $("#ejecutar_algoritmo, #dibujar_nodo, #dibujar_arista").removeClass("deshabilitado");
+    $("#algoritmo").parent().removeClass("deshabilitado");
 });
 
 // LIMPIAR RASTRO DE EJECUCION
