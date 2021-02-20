@@ -28,7 +28,7 @@ async function BFS(start) {
             // extrer el nodo de la cola, paso 4
             let u;
             await paso(() => {
-                u = Q.pop();
+                u = Q.shift();
             });
     
             // Recorrer cada nodo adyacente al nodo U
