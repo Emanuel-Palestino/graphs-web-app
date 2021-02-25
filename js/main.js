@@ -1,4 +1,5 @@
 $('.modal').hide();
+getMedidas();
 
 const btnEjecutar = $("#ejecutar_algoritmo");
 const btnLimpiarGrafo = $("#limpiar_grafo");
@@ -13,6 +14,8 @@ let contadorAristas = -1;
 let contadorNodos = 1;
 let pausa = false;
 let detener = false;
+
+let algoritmoVisible = false;
 
 // MODAL
 function showModal(modal, title = null, showed = null, closing = null) {
@@ -60,7 +63,7 @@ $('.boton-menu').click(function () {
 
 // DESPLEGAR MENU DE OPCIONES
 $('#opciones').click(function () {
-    $('#opciones_menu').slideToggle(200, function () {
+    $('#opciones_menu').slideToggle(250, function () {
         if ($('#opciones_menu').attr('style') == 'display: none;')
             $('#opciones').removeClass('activo');
     });
@@ -209,9 +212,11 @@ async function paso(codigo) {
                 break;
         }
     }
-    if(detener)
+    if(detener) {
+        detener = false;
         throw new Error('Detener');
-    codigo();
+    }
+    await codigo();
 };
 
 function cadaSegundo() {
@@ -231,7 +236,9 @@ $('#pausar_ejecucion').click(function() {
 // EJECUCION DE ALGORITMO TERMINADO
 function ejecucionFinalizada() {
     $("#algoritmo").parent().removeClass("deshabilitado");
-    $("#ejecutar_algoritmo, #dibujar_nodo, #dibujar_arista, #limpiar_ejecucion").removeClass("deshabilitado");
+    $("#ejecutar_algoritmo, #limpiar_ejecucion").removeClass("deshabilitado");
+    if(!algoritmoVisible)
+        $("#dibujar_nodo, #dibujar_arista").removeClass("deshabilitado");
     $("#pausar_ejecucion, #detener_ejecucion").addClass("deshabilitado");
 }
 
@@ -258,4 +265,44 @@ $("#limpiar_ejecucion").click(function() {
         nodo.finalizado = 0;
         nodo.predecesor = null;
     });
+});
+
+// Asignarle medidas al viewbox del canvas
+function getMedidas() {
+    let canvas = $("#canvas");
+    canvas.attr("viewBox", `0 0 ${canvas.width()} ${canvas.height()}`);
+}
+
+// VER ALGORITMO
+$("#ver_algoritmo").click(function() {
+    let lienzo = $("#canvas");
+
+    if (!algoritmoVisible/*  || lienzo.width() > $("#content").width() - 400 */) {
+        lienzo.animate({
+            width: `${$("#content").width() - 400}`
+        }, 600);
+    
+        $("#panel_izquierdo").animate({
+            left: "0px"
+        }, 600);
+
+        // Desactivar Edicion
+        $("#dibujar_nodo, #dibujar_arista").addClass("deshabilitado");
+        elemento = 3;
+        algoritmoVisible = true;
+    } else {
+        lienzo.animate({
+            width: `100%`
+        }, 600);
+    
+        $("#panel_izquierdo").animate({
+            left: "-400px"
+        }, 600);
+
+        // Activar Edicion
+        $("#ver_algoritmo").removeClass("activo");
+        $("#dibujar_nodo, #dibujar_arista").removeClass("deshabilitado");
+        elemento = 0;
+        algoritmoVisible = false;
+    }
 });
