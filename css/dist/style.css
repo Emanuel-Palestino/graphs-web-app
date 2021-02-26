@@ -178,16 +178,35 @@ h1 {
   width: 100%;
   height: 82vh;
   background-color: #e2e2e2;
-  border-bottom: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
 }
 #content #panel_izquierdo {
   position: absolute;
   top: 0;
-  left: -400px;
-  width: 400px;
+  left: -350px;
+  width: 350px;
   height: 82vh;
   background-color: white;
+}
+#content #panel_izquierdo h3 {
+  font-size: 22px;
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 12px;
+}
+#content #panel_izquierdo .pseudocodigo {
+  width: calc(100% - 40px);
+  margin: 0 auto;
+}
+#content #panel_izquierdo .pseudocodigo .bloque {
+  padding-left: 22px;
+}
+#content #panel_izquierdo .pseudocodigo p {
+  font-size: 14px;
+  padding: 2px;
+}
+#content #panel_izquierdo .pseudocodigo .activo {
+  border-radius: 6px;
+  background-color: #ffa50080;
 }
 
 .full-nodo text {
@@ -235,14 +254,16 @@ h1 {
 
 #resultados {
   display: block;
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
   margin-bottom: 40px;
 }
 #resultados h2 {
-  font-size: 26px;
-  padding: 12px;
+  font-size: 24px;
+  padding: 8px;
   text-align: center;
+  background-color: #192a56;
+  color: white;
+  margin-bottom: 15px;
 }
 #resultados .table {
   width: auto;

@@ -146,6 +146,14 @@ $("#configuracion_formulario").submit(function (e) {
 // TIPO DE ALGORITMO A EJECUTAR
 $("#algoritmo").change(function () {
     algoritmo = parseInt($(this).val());
+    switch(algoritmo) {
+        case 1:
+            $(".pseudocodigo").empty().html(pseudocodigoBFS);
+            break;
+        case 2:
+            $(".pseudocodigo").empty().html(pseudocodigoDFS);
+            break;
+    }
 });
 
 // EJECUTAR EL ALGORITMO SELECCIONADO
@@ -196,7 +204,9 @@ $('#informar_antes_ejecutar').submit(function (e) {
 });
 
 // PROMESA PARA LA EJECUCION DE UN PASO DEL ALGORITMO
-async function paso(codigo) {
+async function paso(num, codigo) {
+    pintarLineas(num);
+
     let step = new Promise(resolve => {
         setTimeout(() => {
             resolve(true);
@@ -217,6 +227,7 @@ async function paso(codigo) {
         throw new Error('Detener');
     }
     await codigo();
+    despintarLineas(num);
 };
 
 function cadaSegundo() {
@@ -276,15 +287,16 @@ function getMedidas() {
 // VER ALGORITMO
 $("#ver_algoritmo").click(function() {
     let lienzo = $("#canvas");
+    let tiempoAnimacion = 400;
 
-    if (!algoritmoVisible/*  || lienzo.width() > $("#content").width() - 400 */) {
+    if (!algoritmoVisible) {
         lienzo.animate({
-            width: `${$("#content").width() - 400}`
-        }, 600);
+            width: `${$("#content").width() - 350}`
+        }, tiempoAnimacion);
     
         $("#panel_izquierdo").animate({
             left: "0px"
-        }, 600);
+        }, tiempoAnimacion);
 
         // Desactivar Edicion
         $("#dibujar_nodo, #dibujar_arista").addClass("deshabilitado");
@@ -293,11 +305,11 @@ $("#ver_algoritmo").click(function() {
     } else {
         lienzo.animate({
             width: `100%`
-        }, 600);
+        }, tiempoAnimacion);
     
         $("#panel_izquierdo").animate({
-            left: "-400px"
-        }, 600);
+            left: "-350px"
+        }, tiempoAnimacion);
 
         // Activar Edicion
         $("#ver_algoritmo").removeClass("activo");
@@ -306,3 +318,12 @@ $("#ver_algoritmo").click(function() {
         algoritmoVisible = false;
     }
 });
+
+// PINTAR LINEAS DE CODIGO
+function pintarLineas(paso) {
+    $(`.pseudocodigo div[paso="${paso}"], .pseudocodigo p[paso="${paso}"]`).addClass("activo");
+}
+
+function despintarLineas(paso) {
+    $(`.pseudocodigo div[paso="${paso}"], .pseudocodigo p[paso="${paso}"]`).removeClass("activo");
+}

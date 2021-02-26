@@ -83,10 +83,56 @@
 
     <!-- CUERPO -->
     <div id="content">
-        
+
         <!-- PANEL IZQUIERDO -->
         <div id="panel_izquierdo">
             <h3>Algoritmo</h3>
+            <div class="pseudocodigo">
+                <p>BFS(grafo G, nodo_fuente s) {</p>
+                <div class="bloque">
+                    <p>for u ∈ V[G] do {</p>
+                    <div class="bloque">
+                        <div paso="1">
+                            <p>estado[u] = NO_VISITADO;</p>
+                            <p>distancia[u] = INFINITO;</p>
+                            <p>padre[u] = NULL;</p>
+                        </div>
+                    </div>
+                    <p>}</p>
+
+                    <div paso="2">
+                        <p>estado[s] = VISITADO;</p>
+                        <p>distancia[s] = 0;</p>
+                        <p>padre[s] = NULL;</p>
+                    </div>
+                    <p>CrearCola(Q);</p>
+                    <p paso="3">Encolar(Q, s);</p>
+                    <p>while !vacía(Q) do {</p>
+                    <div class="bloque">
+                        <p paso="4">u = extraer(Q);</p>
+
+                        <p>for v ∈ adyacencia[u] do {</p>
+                        <div class="bloque">
+                            <p>if estado[v] == NO_VISITADO then {</p>
+                            <div class="bloque">
+                                <div paso="5">
+                                    <p>estado[v] = VISITADO;</p>
+                                    <p>distancia[v] = distancia[u] + 1;</p>
+                                    <p>padre[v] = u;</p>
+                                </div>
+
+                                <p paso="6">Encolar(Q, v);</p>
+                            </div>
+                            <p>}</p>
+                        </div>
+                        <p>}</p>
+
+                        <p paso="7">estado[u] = FINALIZADO;</p>
+                    </div>
+                    <p>}</p>
+                </div>
+                <p>}</p>
+            </div>
         </div>
 
         <!-- LIENZO -->
@@ -191,7 +237,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <input type="submit" value="Ok" form="informar_antes_ejecutar" id="informar_ejecutar_terminar" class="boton cerrar-modal">
+                <input type="submit" value="Ok" form="informar_antes_ejecutar" id="informar_ejecutar_terminar"
+                    class="boton cerrar-modal">
             </div>
         </div>
     </div>
